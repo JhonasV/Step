@@ -1,3 +1,4 @@
+import 'package:Step/screens/competencies_screen.dart';
 import 'package:flutter/material.dart';
 
 class StepMenu extends StatelessWidget {
@@ -5,54 +6,75 @@ class StepMenu extends StatelessWidget {
   final String subtitle;
   final IconData icon;
   final String imageUrl;
-  StepMenu({this.title, this.subtitle, this.icon, this.imageUrl});
+  final Color color1, color2;
+  StepMenu(
+      {this.title,
+      this.subtitle,
+      this.icon,
+      this.imageUrl,
+      this.color1,
+      this.color2});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => print("Step cards tapped"),
+      onTap: () => Navigator.pushNamed(context, CompentenciesScreen.id),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 18.0),
-        height: 160.0,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18.0),
-          color: Color.fromRGBO(28, 28, 27, 0.9),
-          image: DecorationImage(
-            colorFilter: ColorFilter.srgbToLinearGamma(),
-            image: AssetImage(imageUrl),
-            fit: BoxFit.cover,
+          gradient: new LinearGradient(
+            colors: [color1, color2],
+            begin: Alignment.centerLeft,
+            end: Alignment(1.0, 1.0),
           ),
         ),
-        child: Column(
+        child: Stack(
           children: [
-            _buildTitle(),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: _buildSubtitle(),
+            Opacity(
+              opacity: 0.3,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(imageUrl),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0),
-              child: _buildButton(),
-            )
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 18.0),
+              child: Column(
+                children: [
+                  _buildTitle(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: _buildSubtitle(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: _buildButton(context),
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Row _buildButton() {
+  Row _buildButton(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         FlatButton(
           color: Colors.white,
-          onPressed: () {},
+          onPressed: () => Navigator.pushNamed(context, CompentenciesScreen.id),
           child: Text(
-            "In Progress",
+            "Start",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17.0,
-              color: Colors.orange[300],
+              color: Colors.green[300],
             ),
           ),
         ),
@@ -70,15 +92,12 @@ class StepMenu extends StatelessWidget {
       children: [
         Text(
           subtitle,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
-              shadows: [
-                Shadow(
-                  color: Colors.blue.shade900.withOpacity(1.0),
-                ),
-              ]),
+            color: Colors.white,
+            fontSize: 20.0,
+            fontWeight: FontWeight.w300,
+          ),
         ),
       ],
     );
