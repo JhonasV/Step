@@ -1,0 +1,35 @@
+import 'package:Step/ui/competencies/create_competencies.dart';
+import 'package:Step/ui/competencies/listview_competencies.dart';
+import 'package:flutter/material.dart';
+
+class CompentenciesScreen extends StatefulWidget {
+  static final String id = "compentencies_screen";
+  @override
+  _CompentenciesState createState() => _CompentenciesState();
+}
+
+class _CompentenciesState extends State<CompentenciesScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0.0,
+            backgroundColor: Colors.blue,
+            title: Text("Gestión de Competencias"),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () =>
+                Navigator.pushNamed(context, CreateCompentenciesScreen.id),
+            child: Icon(Icons.add),
+            elevation: 10.0,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          body: ListViewCompetencies(),
+        ),
+      ),
+    );
+  }
+}

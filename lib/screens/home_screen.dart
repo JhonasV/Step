@@ -11,17 +11,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  _buildMenuItems() {
-    List<Widget> items = [];
-    stepMenuItems.forEach((element) {
-      items.add(StepMenu(
-        title: element["title"],
-        subtitle: element["subtitle"],
-        icon: element["icon"],
-        imageUrl: element["imageUrl"],
-        color1: element["color1"],
-        color2: element["color2"],
-      ));
+  List<StepMenu> _buildMenuItems() {
+    List<StepMenu> items = [];
+    Map<String, dynamic> currentUser = {
+      "name": "Nelson",
+      "lastName": "Veras",
+      "access": ["admin"]
+    };
+    List<String> userAccess = currentUser["access"];
+    List<String> screenAccess = [];
+    stepMenuItems.forEach((item) {
+      screenAccess = item["access"];
+      userAccess.forEach((String access) {
+        if (screenAccess.contains(access)) {
+          items.add(
+            StepMenu(
+              title: item["title"],
+              subtitle: item["subtitle"],
+              icon: item["icon"],
+              imageUrl: item["imageUrl"],
+              color1: item["color1"],
+              color2: item["color2"],
+              screenPath: item["screenPath"],
+            ),
+          );
+        }
+      });
     });
 
     return items;

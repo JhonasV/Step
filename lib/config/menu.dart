@@ -3,35 +3,43 @@ import 'package:flutter/material.dart';
 List<Map<String, dynamic>> stepMenuItems = [
   {
     "title": "Competencias",
-    "subtitle": "Cuéntanos de tus conocimientos",
+    "subtitle": "Gestion",
     "icon": Icons.arrow_right,
     "imageUrl": "assets/images/competencies.jpg",
     "color1": Colors.blue,
     "color2": Colors.blue[200],
+    "screenPath": "compentencies_screen",
+    "access": ["admin"]
   },
   {
     "title": "Idiomas",
-    "subtitle": "¿Qué idiomas hablas?",
+    "subtitle": "Gestion",
     "icon": Icons.arrow_right,
     "imageUrl": "assets/images/languages.jpg",
     "color1": Colors.red,
     "color2": Colors.red[200],
+    "screenPath": "",
+    "access": ["admin"]
   },
   {
     "title": "Capacitaciones",
-    "subtitle": "¿Cuales capacitaciones tienes?",
+    "subtitle": "Gestion",
     "icon": Icons.arrow_right,
     "imageUrl": "assets/images/trainings.jpg",
     "color1": Colors.green,
     "color2": Colors.green[200],
+    "screenPath": "",
+    "access": ["admin"]
   },
   {
     "title": "Puestos",
-    "subtitle": "¿Cuáles puestos haz desempeñado?",
+    "subtitle": "Gestion",
     "icon": Icons.arrow_right,
     "imageUrl": "assets/images/job_roles.jpg",
     "color1": Colors.black,
     "color2": Colors.grey[200],
+    "screenPath": "",
+    "access": ["admin"]
   },
   {
     "title": "Candidatos",
@@ -40,6 +48,8 @@ List<Map<String, dynamic>> stepMenuItems = [
     "imageUrl": "assets/images/candidates.jpg",
     "color1": Colors.blue,
     "color2": Colors.blue[200],
+    "screenPath": "",
+    "access": ["admin", "candidate"]
   },
   {
     "title": "Experiencia laboral",
@@ -48,6 +58,8 @@ List<Map<String, dynamic>> stepMenuItems = [
     "imageUrl": "assets/images/experience.jpg",
     "color1": Colors.orange,
     "color2": Colors.orange[200],
+    "screenPath": "",
+    "access": ["admin", "candidate"]
   },
   {
     "title": "Selección candidato",
@@ -56,6 +68,8 @@ List<Map<String, dynamic>> stepMenuItems = [
     "imageUrl": "assets/images/competencies.jpg",
     "color1": Colors.yellow,
     "color2": Colors.yellow[200],
+    "screenPath": "",
+    "access": ["admin"]
   },
   {
     "title": "Consultas",
@@ -64,6 +78,8 @@ List<Map<String, dynamic>> stepMenuItems = [
     "imageUrl": "assets/images/competencies.jpg",
     "color1": Colors.purple,
     "color2": Colors.purple[200],
+    "screenPath": "",
+    "access": ["admin"]
   },
   {
     "title": "Reportes",
@@ -72,5 +88,7 @@ List<Map<String, dynamic>> stepMenuItems = [
     "imageUrl": "assets/images/competencies.jpg",
     "color1": Colors.teal,
     "color2": Colors.teal[200],
+    "screenPath": "",
+    "access": ["admin"]
   },
 ];

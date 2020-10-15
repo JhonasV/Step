@@ -1,4 +1,4 @@
-import 'package:Step/screens/competencies_screen.dart';
+import 'package:Step/ui/competencies/competencies_screen.dart';
 import 'package:flutter/material.dart';
 
 class StepMenu extends StatelessWidget {
@@ -7,18 +7,20 @@ class StepMenu extends StatelessWidget {
   final IconData icon;
   final String imageUrl;
   final Color color1, color2;
+  final String screenPath;
   StepMenu(
       {this.title,
       this.subtitle,
       this.icon,
       this.imageUrl,
       this.color1,
-      this.color2});
+      this.color2,
+      this.screenPath});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, CompentenciesScreen.id),
+      onTap: () => Navigator.pushNamed(context, screenPath),
       child: Container(
         decoration: BoxDecoration(
           gradient: new LinearGradient(
@@ -27,32 +29,39 @@ class StepMenu extends StatelessWidget {
             end: Alignment(1.0, 1.0),
           ),
         ),
-        child: Stack(
+        child: Column(
           children: [
-            Opacity(
-              opacity: 0.3,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(imageUrl),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 18.0),
-              child: Column(
+            Expanded(
+              child: Stack(
                 children: [
-                  _buildTitle(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: _buildSubtitle(),
+                  Opacity(
+                    opacity: 0.3,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(imageUrl),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: _buildButton(context),
-                  )
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.0, vertical: 18.0),
+                    child: Column(
+                      children: [
+                        _buildTitle(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: _buildSubtitle(),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: _buildButton(context),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
