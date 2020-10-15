@@ -19,8 +19,8 @@ class _ListViewCompetenciesState extends State<ListViewCompetencies> {
     });
   }
 
-  List<ListTile> _buildList() {
-    List<ListTile> listTiles = [];
+  List<Container> _buildList() {
+    List<Container> listTiles = [];
     competencies.forEach((element) {
       listTiles.add(_buildListTile(element));
     });
@@ -41,33 +41,49 @@ class _ListViewCompetenciesState extends State<ListViewCompetencies> {
         : ListView(children: _buildList());
   }
 
-  ListTile _buildListTile(Competencies item) {
-    return ListTile(
-      leading: CircleAvatar(
-          backgroundColor: item.status == 1 ? Colors.green : Colors.grey),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Text(
-              item.description,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23.0),
-              overflow: TextOverflow.ellipsis,
-            ),
+  Container _buildListTile(Competencies item) {
+    return Container(
+      margin: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(0.0, 1.0), //(x,y)
+            blurRadius: 6.0,
           ),
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(FontAwesomeIcons.solidTrashAlt),
-                onPressed: () => print("Delete"),
-              ),
-              IconButton(
-                icon: Icon(FontAwesomeIcons.solidEdit),
-                onPressed: () => print("Edit"),
-              ),
-            ],
-          )
         ],
+      ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: item.status == 1 ? Colors.green : Colors.grey,
+          child: Icon(FontAwesomeIcons.pepperHot),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                item.description,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19.0),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            // Row(
+            //   children: [
+            //     IconButton(
+            //       icon: Icon(FontAwesomeIcons.ellipsisV),
+            //       onPressed: () => print("Delete"),
+            //     ),
+            //     IconButton(
+            //       icon: Icon(FontAwesomeIcons.solidEdit),
+            //       onPressed: () => print("Edit"),
+            //     ),
+            //   ],
+            // )
+          ],
+        ),
+        trailing: Icon(FontAwesomeIcons.arrowAltCircleRight),
       ),
     );
   }

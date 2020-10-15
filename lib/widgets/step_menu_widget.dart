@@ -21,51 +21,67 @@ class StepMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, screenPath),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: new LinearGradient(
-            colors: [color1, color2],
-            begin: Alignment.centerLeft,
-            end: Alignment(1.0, 1.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          width: 100,
+          height: 200,
+          margin: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            // borderRadius: BorderRadius.circular(15),
+            color: Color.fromRGBO(248, 249, 255, 0.8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey,
+                offset: Offset(0.0, 1.0), //(x,y)
+                blurRadius: 6.0,
+              )
+            ],
+            gradient: new LinearGradient(
+              colors: [color1, color2],
+              begin: Alignment.centerLeft,
+              end: Alignment(1.0, 1.0),
+            ),
           ),
-        ),
-        child: Column(
-          children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  Opacity(
-                    opacity: 0.3,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(imageUrl),
-                          fit: BoxFit.fill,
+          child: Column(
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    Opacity(
+                      opacity: 0.3,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(imageUrl),
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 15.0, vertical: 18.0),
-                    child: Column(
-                      children: [
-                        _buildTitle(),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: _buildSubtitle(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10.0),
-                          child: _buildButton(context),
-                        )
-                      ],
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 18.0),
+                      child: Column(
+                        children: [
+                          _buildTitle(),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: _buildSubtitle(),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.0),
+                            child: _buildButton(context),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

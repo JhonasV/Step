@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromRGBO(248, 249, 255, 0.5),
         title: Text(
           "Step",
           style: TextStyle(
@@ -81,22 +81,26 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            SizedBox(height: 10.0),
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 1,
-                childAspectRatio: 2.3,
-                crossAxisSpacing: 2.0,
-                mainAxisSpacing: 5.0,
-                children: _buildMenuItems(),
-              ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: stepMenuItems.length,
+              itemBuilder: (context, index) {
+                return StepMenu(
+                  title: stepMenuItems[index]["title"],
+                  subtitle: stepMenuItems[index]["subtitle"],
+                  icon: stepMenuItems[index]["icon"],
+                  imageUrl: stepMenuItems[index]["imageUrl"],
+                  color1: stepMenuItems[index]["color1"],
+                  color2: stepMenuItems[index]["color2"],
+                  screenPath: stepMenuItems[index]["screenPath"],
+                );
+              },
+              // children: _buildMenuItems(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
