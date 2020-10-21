@@ -1,5 +1,6 @@
 import 'package:Step/ui/competencies/create_competencies.dart';
 import 'package:Step/ui/competencies/listview_competencies.dart';
+import 'package:Step/widgets/drawer_widget.dart';
 import 'package:flutter/material.dart';
 
 class CompentenciesScreen extends StatefulWidget {
@@ -15,14 +16,17 @@ class _CompentenciesState extends State<CompentenciesScreen> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
+          drawer: DrawerWidget(),
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: Colors.blue,
             title: Text("Gestión de Competencias"),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () =>
-                Navigator.pushNamed(context, CreateCompentenciesScreen.id),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CreateCompentenciesScreen())),
             child: Icon(Icons.add),
             elevation: 10.0,
           ),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:Step/screens/login_screen.dart';
 import 'package:Step/ui/competencies/competencies_screen.dart';
 import 'package:Step/screens/home_screen.dart';
 import 'package:Step/ui/competencies/create_competencies.dart';
@@ -23,11 +24,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Step",
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeScreen.id,
+      initialRoute: LoginScreen.id,
       routes: {
         HomeScreen.id: (context) => HomeScreen(),
         CompentenciesScreen.id: (context) => CompentenciesScreen(),
-        CreateCompentenciesScreen.id: (context) => CreateCompentenciesScreen()
+        CreateCompentenciesScreen.id: (context) => CreateCompentenciesScreen(),
+        LoginScreen.id: (context) => LoginScreen()
       },
     );
   }

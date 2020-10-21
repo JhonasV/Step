@@ -1,5 +1,7 @@
 class Competencies {
   int id;
+  DateTime createdAt;
+  DateTime updatedAt;
   String description;
   int status;
 

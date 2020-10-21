@@ -25,7 +25,7 @@ class StepMenu extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         child: Container(
           width: 100,
-          height: 200,
+          height: 180,
           margin: EdgeInsets.all(20),
           decoration: BoxDecoration(
             // borderRadius: BorderRadius.circular(15),
@@ -89,20 +89,20 @@ class StepMenu extends StatelessWidget {
 
   Row _buildButton(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        FlatButton(
-          color: Colors.white,
-          onPressed: () => Navigator.pushNamed(context, CompentenciesScreen.id),
-          child: Text(
-            "Start",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 17.0,
-              color: Colors.green[300],
-            ),
-          ),
-        ),
+        // FlatButton(
+        //   color: Colors.white,
+        //   onPressed: () => Navigator.pushNamed(context, CompentenciesScreen.id),
+        //   child: Text(
+        //     "Start",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.bold,
+        //       fontSize: 17.0,
+        //       color: Colors.green[300],
+        //     ),
+        //   ),
+        // ),
         Icon(
           Icons.arrow_right_rounded,
           color: Colors.white,

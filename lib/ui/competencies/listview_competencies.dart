@@ -57,7 +57,6 @@ class _ListViewCompetenciesState extends State<ListViewCompetencies> {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: item.status == 1 ? Colors.green : Colors.grey,
-          child: Icon(FontAwesomeIcons.pepperHot),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -69,21 +68,22 @@ class _ListViewCompetenciesState extends State<ListViewCompetencies> {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            // Row(
-            //   children: [
-            //     IconButton(
-            //       icon: Icon(FontAwesomeIcons.ellipsisV),
-            //       onPressed: () => print("Delete"),
-            //     ),
-            //     IconButton(
-            //       icon: Icon(FontAwesomeIcons.solidEdit),
-            //       onPressed: () => print("Edit"),
-            //     ),
-            //   ],
-            // )
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(FontAwesomeIcons.trash, color: Colors.red),
+                  onPressed: () => print("Delete"),
+                ),
+                IconButton(
+                  icon: Icon(FontAwesomeIcons.solidEdit,
+                      color: Colors.yellow[300]),
+                  onPressed: () => print("Edit"),
+                ),
+              ],
+            )
           ],
         ),
-        trailing: Icon(FontAwesomeIcons.arrowAltCircleRight),
+        // trailing: Icon(FontAwesomeIcons.arrowAltCircleRight),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:Step/widgets/drawer_widget.dart';
 import 'package:Step/widgets/step_menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:Step/config/menu.dart';
@@ -11,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // _setCurrentUser() async {}
   List<StepMenu> _buildMenuItems() {
     List<StepMenu> items = [];
     Map<String, dynamic> currentUser = {
@@ -45,23 +47,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: DrawerWidget(),
       appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Color.fromRGBO(248, 249, 255, 0.5),
+        // iconTheme: new IconThemeData(color: Colors.blue, size: 40.0),
+        // backgroundColor: Color.fromRGBO(248, 249, 255, 0.5),
         title: Text(
           "Step",
           style: TextStyle(
-              color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 27.0,
               decorationColor: Colors.orange[400]),
         ),
-        actions: [
-          FlatButton(
-            onPressed: () {},
-            child: Icon(Icons.settings),
-          ),
-        ],
+        centerTitle: true,
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,

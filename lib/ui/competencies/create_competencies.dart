@@ -1,6 +1,7 @@
 import 'package:Step/models/competencies.dart';
 import 'package:Step/services/competencies_service.dart';
 import 'package:Step/ui/competencies/competencies_screen.dart';
+import 'package:Step/widgets/drawer_widget.dart';
 import 'package:flutter/material.dart';
 
 class CreateCompentenciesScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _CreateCompentenciesState extends State<CreateCompentenciesScreen> {
       );
 
       // Navigator.of(context).pop();
-      //Navigator.of(context).popAndPushNamed(CompentenciesScreen.id);
+      Navigator.of(context).pushNamed(CompentenciesScreen.id);
     }
   }
 
@@ -50,6 +51,7 @@ class _CreateCompentenciesState extends State<CreateCompentenciesScreen> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
+          drawer: DrawerWidget(),
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: Colors.blue,
