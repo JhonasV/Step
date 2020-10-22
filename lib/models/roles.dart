@@ -11,7 +11,6 @@ class Roles {
       id: json['id'],
       name: json['name'],
       createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
     );
   }
 }

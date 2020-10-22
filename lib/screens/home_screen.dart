@@ -1,3 +1,6 @@
+import 'package:Step/models/roles.dart';
+import 'package:Step/models/user.dart';
+import 'package:Step/services/auth_service.dart';
 import 'package:Step/widgets/drawer_widget.dart';
 import 'package:Step/widgets/step_menu_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,20 +15,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // _setCurrentUser() async {}
-  List<StepMenu> _buildMenuItems() {
+  List<StepMenu> menuItems = [];
+  Future<User> _getCurrentUser() async {
+    var result = await AuthService.current();
+    return result.data;
+  }
+
+  Future<void> _buildMenuItems() async {
     List<StepMenu> items = [];
-    Map<String, dynamic> currentUser = {
-      "name": "Nelson",
-      "lastName": "Veras",
-      "access": ["admin"]
-    };
-    List<String> userAccess = currentUser["access"];
-    List<String> screenAccess = [];
-    stepMenuItems.forEach((item) {
-      screenAccess = item["access"];
-      userAccess.forEach((String access) {
-        if (screenAccess.contains(access)) {
+    var currentUser = await _getCurrentUser();
+    List<String> itemAccess = [];
+    for (var item in stepMenuItems) {
+      for (Roles role in currentUser.roles) {
+        itemAccess = item['access'] as List<String>;
+        if (itemAccess.contains(role.name)) {
           items.add(
             StepMenu(
               title: item["title"],
@@ -37,11 +40,18 @@ class _HomeScreenState extends State<HomeScreen> {
               screenPath: item["screenPath"],
             ),
           );
+          break;
         }
-      });
-    });
+      }
+    }
 
-    return items;
+    setState(() => menuItems = items);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _buildMenuItems();
   }
 
   @override
@@ -49,8 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       drawer: DrawerWidget(),
       appBar: AppBar(
-        // iconTheme: new IconThemeData(color: Colors.blue, size: 40.0),
-        // backgroundColor: Color.fromRGBO(248, 249, 255, 0.5),
         title: Text(
           "Step",
           style: TextStyle(
@@ -82,16 +90,16 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: stepMenuItems.length,
+              itemCount: menuItems.length,
               itemBuilder: (context, index) {
                 return StepMenu(
-                  title: stepMenuItems[index]["title"],
-                  subtitle: stepMenuItems[index]["subtitle"],
-                  icon: stepMenuItems[index]["icon"],
-                  imageUrl: stepMenuItems[index]["imageUrl"],
-                  color1: stepMenuItems[index]["color1"],
-                  color2: stepMenuItems[index]["color2"],
-                  screenPath: stepMenuItems[index]["screenPath"],
+                  title: menuItems[index].title,
+                  subtitle: menuItems[index].subtitle,
+                  icon: menuItems[index].icon,
+                  imageUrl: menuItems[index].imageUrl,
+                  color1: menuItems[index].color1,
+                  color2: menuItems[index].color2,
+                  screenPath: menuItems[index].screenPath,
                 );
               },
               // children: _buildMenuItems(),

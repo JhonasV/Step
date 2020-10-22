@@ -5,12 +5,10 @@ class TaskResult<T> {
   bool success;
   String messages;
 
-  TaskResult({this.data, this.success, this.messages});
+  TaskResult({this.data, this.success = true, this.messages = ""});
 
-  factory TaskResult.fromJson(Map<String, dynamic> json) {
+  factory TaskResult.fromJson(Map<String, dynamic> json, T data) {
     return new TaskResult<T>(
-        data: json['data'],
-        success: json['success'],
-        messages: json['messages']);
+        data: data, success: json['success'], messages: json['messages']);
   }
 }

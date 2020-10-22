@@ -49,7 +49,7 @@ List<Map<String, dynamic>> stepMenuItems = [
     "color1": Colors.blue,
     "color2": Colors.blue[200],
     "screenPath": "",
-    "access": ["admin", "candidate"]
+    "access": ["admin", "applicant"]
   },
   {
     "title": "Experiencia laboral",
@@ -59,7 +59,7 @@ List<Map<String, dynamic>> stepMenuItems = [
     "color1": Colors.orange,
     "color2": Colors.orange[200],
     "screenPath": "",
-    "access": ["admin", "candidate"]
+    "access": ["admin", "applicant"]
   },
   {
     "title": "Selección candidato",

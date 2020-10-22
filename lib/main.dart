@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:Step/screens/login_screen.dart';
 import 'package:Step/ui/competencies/competencies_screen.dart';
 import 'package:Step/screens/home_screen.dart';
