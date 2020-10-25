@@ -26,13 +26,15 @@ class AuthService {
       result = TaskResult<String>.fromJson(body, data);
     }
 
-    if (response.statusCode == 401) {}
+    if (response.statusCode == 401) {
+      result = TaskResult<String>.fromJson(body, "");
+    }
 
     return result;
   }
 
-  static Future<TaskResult<User>> register(User user) async {
-    var result = new TaskResult<User>();
+  static Future<TaskResult<String>> register(User user) async {
+    var result = new TaskResult<String>();
     http.Response response = await http.post(
       "$API_URI/auth/register",
       body: jsonEncode(<String, dynamic>{
@@ -44,19 +46,21 @@ class AuthService {
         "content-type": "application/json"
       },
     );
-
+    var body = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      var body = jsonDecode(response.body);
-      var user = User.fromJson(body["data"]);
-      result = TaskResult<User>.fromJson(body, user);
+      var data = body["data"];
+      result = TaskResult<String>.fromJson(body, data);
+    }
+
+    if (response.statusCode == 400) {
+      result = TaskResult<String>.fromJson(body, "");
     }
 
     return result;
   }
 
   static Future<TaskResult<User>> current() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString("BEARER_TOKEN");
+    var token = await getToken();
     http.Response response = await http.get(
       "$API_URI/auth/current",
       headers: {
@@ -65,22 +69,44 @@ class AuthService {
         "Authorization": "Bearer $token"
       },
     );
-    var body = jsonDecode(response.body);
-    var user = User.fromJson(body["data"]);
-    return TaskResult<User>.fromJson(body, user);
+    TaskResult<User> result = new TaskResult<User>();
+    User user = new User();
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      user = User.fromJson(body["data"]);
+      result = TaskResult<User>.fromJson(body, user);
+    } else {
+      await removeToken();
+    }
+
+    return result;
   }
 
   static Future<TaskResult<bool>> logOut() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString("BEARER_TOKEN");
+    var token = await getToken();
 
     if (token != null) {
-      prefs.remove("BEARER_TOKEN");
+      await removeToken();
     }
 
     var result = TaskResult<bool>();
     result.data = true;
 
     return result;
+  }
+
+  static Future<void> saveToken(String token) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString(TOKEN_KEY, token);
+  }
+
+  static Future<void> removeToken() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.remove(TOKEN_KEY);
+  }
+
+  static Future<String> getToken() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString(TOKEN_KEY);
   }
 }

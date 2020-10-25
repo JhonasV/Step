@@ -1,18 +1,17 @@
 import 'dart:convert';
 import 'package:Step/config/api_config.dart';
 import 'package:Step/models/competencies.dart';
+import 'package:Step/models/taskresult.dart';
+import 'package:Step/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CompetenciesService {
-  static String bearerToken = "Bearer $AUTH_TOKEN";
-
   static Future<List<Competencies>> getAll() async {
     List<Competencies> result = [];
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString("BEARER_TOKEN");
+    var token = await AuthService.getToken();
 
     try {
       http.Response response = await http.get(
@@ -33,8 +32,7 @@ class CompetenciesService {
 
   static Future<void> create(Competencies competencies) async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      var token = prefs.getString("BEARER_TOKEN");
+      var token = await AuthService.getToken();
       http.Response response = await http.post(
         "$API_URI/compentencies",
         body: jsonEncode(<String, dynamic>{
@@ -54,8 +52,7 @@ class CompetenciesService {
 
   static Future<void> update(Competencies competencies) async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      var token = prefs.getString("BEARER_TOKEN");
+      var token = await AuthService.getToken();
       http.Response response = await http.put(
         "$API_URI/compentencies/${competencies.id}",
         body: jsonEncode(<String, dynamic>{
@@ -71,6 +68,27 @@ class CompetenciesService {
 
       if (response.statusCode == 200) {}
     } catch (e) {}
+  }
+
+  static Future<TaskResult<bool>> delete(int id) async {
+    var token = await AuthService.getToken();
+    http.Response response = await http.delete(
+      "$API_URI/compentencies/$id",
+      headers: {
+        "Accept": "application/json",
+        "content-type": "application/json",
+        "Authorization": "Bearer $token"
+      },
+    );
+
+    var result = new TaskResult<bool>();
+    if (response.statusCode == 200) {
+      bool data = jsonDecode(response.body);
+      result.success = data;
+      result.data = data;
+    }
+
+    return result;
   }
 
   static List<Competencies> parseCompetencies(dynamic responseBody) {

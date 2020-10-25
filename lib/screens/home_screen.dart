@@ -16,12 +16,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<StepMenu> menuItems = [];
+  bool _isLoading = false;
   Future<User> _getCurrentUser() async {
     var result = await AuthService.current();
     return result.data;
   }
 
   Future<void> _buildMenuItems() async {
+    setState(() => _isLoading = !_isLoading);
     List<StepMenu> items = [];
     var currentUser = await _getCurrentUser();
     List<String> itemAccess = [];
@@ -45,7 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
-    setState(() => menuItems = items);
+    setState(() {
+      menuItems = items;
+      _isLoading = !_isLoading;
+    });
   }
 
   @override
@@ -86,27 +91,29 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: menuItems.length,
-              itemBuilder: (context, index) {
-                return StepMenu(
-                  title: menuItems[index].title,
-                  subtitle: menuItems[index].subtitle,
-                  icon: menuItems[index].icon,
-                  imageUrl: menuItems[index].imageUrl,
-                  color1: menuItems[index].color1,
-                  color2: menuItems[index].color2,
-                  screenPath: menuItems[index].screenPath,
-                );
-              },
-              // children: _buildMenuItems(),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: menuItems.length,
+                    itemBuilder: (context, index) {
+                      return StepMenu(
+                        title: menuItems[index].title,
+                        subtitle: menuItems[index].subtitle,
+                        icon: menuItems[index].icon,
+                        imageUrl: menuItems[index].imageUrl,
+                        color1: menuItems[index].color1,
+                        color2: menuItems[index].color2,
+                        screenPath: menuItems[index].screenPath,
+                      );
+                    },
+                    // children: _buildMenuItems(),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

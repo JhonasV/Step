@@ -72,7 +72,11 @@ class _ListViewCompetenciesState extends State<ListViewCompetencies> {
               children: [
                 IconButton(
                   icon: Icon(FontAwesomeIcons.trash, color: Colors.red),
-                  onPressed: () => print("Delete"),
+                  onPressed: () {
+                    print("ID ${item.id} pressed");
+                    // Confirm
+                    // Competencies.remove(item.id)
+                  },
                 ),
                 IconButton(
                   icon: Icon(FontAwesomeIcons.solidEdit,

@@ -14,7 +14,7 @@ class DrawerWidget extends StatefulWidget {
 
 class _DrawerWidgetState extends State<DrawerWidget> {
   User _user;
-  bool _loading = false;
+  bool _loading = false, _isLoadinMenuItems = false;
   List<Widget> menuElements = [];
   @override
   void initState() {
@@ -66,6 +66,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }
 
   _setupFunctions() async {
+    setState(() => _isLoadinMenuItems = !_isLoadinMenuItems);
     var user = await _setupCurrentUser();
     _setupMenuItems(user);
   }
@@ -99,7 +100,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       }
     }
 
-    setState(() => menuElements = menuEl);
+    setState(() {
+      menuElements = menuEl;
+      _isLoadinMenuItems = !_isLoadinMenuItems;
+    });
   }
 
   ListTile _buildListTile(DrawerMenuItem item) {
@@ -113,17 +117,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         ),
       ),
       onTap: () => item.onTap(),
-      trailing: Icon(item.icon, color: Colors.blue),
+      leading: Icon(item.icon, color: Colors.blue),
+      trailing: Icon(Icons.arrow_right, color: Colors.blue),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: menuElements,
-      ),
+      child: _isLoadinMenuItems
+          ? Center(child: CircularProgressIndicator())
+          : ListView(
+              padding: EdgeInsets.zero,
+              children: menuElements,
+            ),
     );
   }
 }

@@ -56,41 +56,45 @@ class _CreateCompentenciesState extends State<CreateCompentenciesScreen> {
             elevation: 0.0,
             backgroundColor: Colors.blue,
           ),
-          body: Container(
-            margin: EdgeInsets.only(top: 50.0),
-            padding: EdgeInsets.all(20.0),
-            child: ListView(
-              children: [
-                _isLoading ? LinearProgressIndicator() : SizedBox.shrink(),
-                Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(bottom: 40.0),
-                  child: Text(
-                    "Compentencias",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 30.0,
-                        decorationColor: Colors.orange[400]),
-                  ),
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          body: Column(
+            children: [
+              _isLoading ? LinearProgressIndicator() : SizedBox.shrink(),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(top: 50.0),
+                  padding: EdgeInsets.all(20.0),
+                  child: ListView(
                     children: [
-                      buildTextFieldTitle("Identificador"),
-                      buildTextFieldId(""),
-                      buildTextFieldTitle("Descripción"),
-                      buildTextFieldDescription(""),
-                      buildTextFieldTitle("Estado"),
-                      buildDropDown(),
-                      buildFlatButton(),
+                      Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(bottom: 40.0),
+                        child: Text(
+                          "Compentencias",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 30.0,
+                              decorationColor: Colors.orange[400]),
+                        ),
+                      ),
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildTextFieldTitle("Descripción"),
+                            buildTextFieldDescription(""),
+                            buildTextFieldTitle("Estado"),
+                            buildDropDown(),
+                            buildFlatButton(),
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                )
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
