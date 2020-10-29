@@ -1,7 +1,5 @@
 import 'package:Step/models/roles.dart';
 
-import 'entitie.dart';
-
 class User {
   int id;
   DateTime createdAt;

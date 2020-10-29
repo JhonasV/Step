@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:Step/screens/login_screen.dart';
 import 'package:Step/screens/register_screen.dart';
-import 'package:Step/ui/competencies/competencies_screen.dart';
+import 'package:Step/screens/competencies/competencies_screen.dart';
 import 'package:Step/screens/home_screen.dart';
-import 'package:Step/ui/competencies/create_competencies.dart';
+import 'package:Step/screens/competencies/create_competencies.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());

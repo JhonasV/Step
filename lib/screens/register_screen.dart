@@ -1,10 +1,8 @@
-import 'package:Step/models/taskresult.dart';
 import 'package:Step/models/user.dart';
 import 'package:Step/screens/home_screen.dart';
 import 'package:Step/screens/login_screen.dart';
 import 'package:Step/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   static final id = "register_screen";

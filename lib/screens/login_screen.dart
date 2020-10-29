@@ -14,10 +14,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   var _formKey = new GlobalKey<FormState>();
-  String _userName = "", _password = "", _message = "";
+  String _userName = "", _password = "";
   bool _isLoading = false;
   bool _validatingLoggedIn = false;
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   initState() {
     super.initState();
@@ -55,8 +55,15 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushNamedAndRemoveUntil(
             HomeScreen.id, (Route<dynamic> route) => false);
       } else {
+        final snackBar = SnackBar(
+          content: Text(
+            result.messages,
+            style: TextStyle(fontSize: 19.5, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.red,
+        );
+        _scaffoldKey.currentState.showSnackBar(snackBar);
         setState(() {
-          _message = result.messages;
           _isLoading = !_isLoading;
           _password = "";
         });
@@ -70,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
+          key: _scaffoldKey,
           body: Column(
             children: [
               _isLoading ? LinearProgressIndicator() : SizedBox.shrink(),
@@ -83,9 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           key: _formKey,
                           child: ListView(
                             children: [
-                              _message.length > 0
-                                  ? _buildAlert()
-                                  : SizedBox.shrink(),
                               Container(
                                 width: double.infinity,
                                 child: Text(
@@ -170,19 +175,6 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: _isLoading ? null : () => _submit(),
           child: Text("Login",
               style: TextStyle(fontSize: 19.0, color: Colors.white)),
-        ),
-      ),
-    );
-  }
-
-  Center _buildAlert() {
-    return Center(
-      child: Text(
-        _message,
-        style: TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
-          color: Colors.red,
         ),
       ),
     );

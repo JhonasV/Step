@@ -1,5 +1,5 @@
-import 'package:Step/ui/competencies/create_competencies.dart';
-import 'package:Step/ui/competencies/listview_competencies.dart';
+import 'package:Step/screens/competencies/create_competencies.dart';
+import 'package:Step/screens/competencies/listview_competencies.dart';
 import 'package:Step/widgets/drawer_widget.dart';
 import 'package:flutter/material.dart';
 

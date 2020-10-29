@@ -1,6 +1,8 @@
 import 'package:Step/models/competencies.dart';
+import 'package:Step/models/taskresult.dart';
+import 'package:Step/screens/home_screen.dart';
 import 'package:Step/services/competencies_service.dart';
-import 'package:Step/ui/competencies/competencies_screen.dart';
+import 'package:Step/screens/competencies/competencies_screen.dart';
 import 'package:Step/widgets/drawer_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -21,16 +23,25 @@ class _CreateCompentenciesState extends State<CreateCompentenciesScreen> {
     if (_formKey.currentState.validate()) {
       setState(() => _isLoading = !_isLoading);
       _formKey.currentState.save();
-      print(_description);
-      print(_status);
-      await CompetenciesService.create(
-        Competencies(
-          description: _description,
-          status: _status == "activo" ? 1 : 0,
-        ),
-      );
 
-      // Navigator.of(context).pop();
+      var comp = Competencies(
+        description: _description,
+        status: _status == "activo" ? 1 : 0,
+        id: widget?.competencies?.id,
+      );
+      var result = TaskResult<bool>();
+      _isUpdated
+          ? result = await CompetenciesService.update(comp)
+          : result = await CompetenciesService.create(comp);
+
+      if (!result.success) {
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text(result.messages)));
+        return;
+      }
+
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          HomeScreen.id, (Route<dynamic> route) => false);
       Navigator.of(context).pushNamed(CompentenciesScreen.id);
     }
   }

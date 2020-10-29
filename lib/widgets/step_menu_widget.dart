@@ -1,4 +1,4 @@
-import 'package:Step/ui/competencies/competencies_screen.dart';
+import 'package:Step/screens/competencies/competencies_screen.dart';
 import 'package:flutter/material.dart';
 
 class StepMenu extends StatelessWidget {

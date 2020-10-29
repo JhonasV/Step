@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class TaskResult<T> {
   T data;
   bool success;
