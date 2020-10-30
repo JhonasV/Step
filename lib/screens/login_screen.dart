@@ -87,64 +87,58 @@ class _LoginScreenState extends State<LoginScreen> {
                       EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
                   child: _validatingLoggedIn
                       ? Center(child: CircularProgressIndicator())
-                      : Form(
-                          key: _formKey,
-                          child: ListView(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                child: Text(
-                                  "Step",
-                                  style: TextStyle(
-                                    fontSize: 40.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              SizedBox(height: 20.0),
-                              Text(
-                                "Nombre de usuario",
-                                style: TextStyle(fontSize: 17.0),
-                              ),
-                              // TextFormField(
-                              //   obscureText: false,
-                              //   initialValue: _userName,
-                              //   onSaved: (input) => _userName = input.trim(),
-                              // ),
-                              _buildTextFieldUserName(),
-                              SizedBox(height: 20.0),
-                              Text(
-                                "Contraseña",
-                                style: TextStyle(fontSize: 17.0),
-                              ),
-                              // TextFormField(
-                              //   obscureText: true,
-                              //   initialValue: _password,
-                              //   onSaved: (input) => _password = input.trim(),
-                              // ),
-                              _buildTextFieldPassword(),
-                              SizedBox(height: 20.0),
-                              _buildLoginFlatButton(),
-                              SizedBox(height: 10.0),
-                              Text(
-                                "O",
-                                style: TextStyle(
-                                    fontSize: 22.0,
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: 10.0),
-                              _buildRegisterFlatButton(),
-                            ],
-                          ),
-                        ),
+                      : _buildForm(),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Form _buildForm() {
+    return Form(
+      key: _formKey,
+      child: ListView(
+        children: [
+          Container(
+            width: double.infinity,
+            child: Text(
+              "Step",
+              style: TextStyle(
+                fontSize: 40.0,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(height: 20.0),
+          Text(
+            "Nombre de usuario",
+            style: TextStyle(fontSize: 17.0),
+          ),
+          _buildTextFieldUserName(),
+          SizedBox(height: 20.0),
+          Text(
+            "Contraseña",
+            style: TextStyle(fontSize: 17.0),
+          ),
+          _buildTextFieldPassword(),
+          SizedBox(height: 20.0),
+          _buildLoginFlatButton(),
+          SizedBox(height: 10.0),
+          Text(
+            "O",
+            style: TextStyle(
+                fontSize: 22.0,
+                color: Colors.blue,
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10.0),
+          _buildRegisterFlatButton(),
+        ],
       ),
     );
   }

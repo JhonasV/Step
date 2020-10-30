@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:Step/screens/languages/create_languages.dart';
+import 'package:Step/screens/languages/languages_screen.dart';
 import 'package:Step/screens/login_screen.dart';
 import 'package:Step/screens/register_screen.dart';
 import 'package:Step/screens/competencies/competencies_screen.dart';
@@ -30,7 +32,9 @@ class MyApp extends StatelessWidget {
         CompentenciesScreen.id: (context) => CompentenciesScreen(),
         CreateCompentenciesScreen.id: (context) => CreateCompentenciesScreen(),
         LoginScreen.id: (context) => LoginScreen(),
-        RegisterScreen.id: (context) => RegisterScreen()
+        RegisterScreen.id: (context) => RegisterScreen(),
+        LanguagesScreen.id: (context) => LanguagesScreen(),
+        CreateLanguagesScreen.id: (context) => CreateLanguagesScreen()
       },
     );
   }
