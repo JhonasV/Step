@@ -74,17 +74,60 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   void _setupMenuItems(User currentUser) {
     var menuItems = _getMenuItems();
     List<Widget> menuEl = [];
-
+    var size = MediaQuery.of(context).size;
     menuEl.add(Container(
-      height: 115.0,
+      height: size.height * .25,
       child: DrawerHeader(
-        child: Text(
-          _user.userName,
-          style: TextStyle(
-            fontSize: 22.0,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+        padding: EdgeInsets.zero,
+        child: Column(
+          children: [
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(
+                  horizontal: size.width * .02, vertical: 0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          "Menu",
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue),
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        IconButton(
+                            icon: Icon(Icons.arrow_forward),
+                            color: Colors.blue,
+                            onPressed: () => Navigator.of(context).pop())
+                      ],
+                    )
+                  ]),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: size.width * .02, vertical: size.height * .02),
+              child: Row(
+                children: [
+                  CircleAvatar(radius: 30),
+                  SizedBox(width: 10),
+                  Text(
+                    _user.userName,
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
         decoration: BoxDecoration(
           color: Colors.blue,

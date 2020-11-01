@@ -73,24 +73,24 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text(""),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.circle),
-            title: Text(""),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.track_changes),
-            title: Text(""),
-          ),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: Colors.white,
+      //   elevation: 0.0,
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       title: Text(""),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.circle),
+      //       title: Text(""),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.track_changes),
+      //       title: Text(""),
+      //     ),
+      //   ],
+      // ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : Column(
