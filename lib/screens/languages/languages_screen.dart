@@ -17,7 +17,6 @@ class _LanguagesState extends State<LanguagesScreen> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          drawer: DrawerWidget(),
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: Colors.blue,

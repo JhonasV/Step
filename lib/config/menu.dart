@@ -28,7 +28,7 @@ List<Map<String, dynamic>> stepMenuItems = [
     "imageUrl": "assets/images/trainings.jpg",
     "color1": Colors.green,
     "color2": Colors.green[200],
-    "screenPath": "",
+    "screenPath": "trainings_screen",
     "access": ["admin"]
   },
   {

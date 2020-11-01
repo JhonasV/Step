@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:Step/screens/competencies/competencies_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -19,13 +21,14 @@ class StepMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, screenPath),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: Container(
-          width: 100,
-          height: 180,
+          width: double.infinity,
+          height: size.height * .21,
           margin: EdgeInsets.all(20),
           decoration: BoxDecoration(
             // borderRadius: BorderRadius.circular(15),
@@ -115,13 +118,15 @@ class StepMenu extends StatelessWidget {
   Row _buildSubtitle() {
     return Row(
       children: [
-        Text(
-          subtitle,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20.0,
-            fontWeight: FontWeight.w300,
+        Expanded(
+          child: Text(
+            subtitle,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0,
+              fontWeight: FontWeight.w300,
+            ),
           ),
         ),
       ],
@@ -131,10 +136,15 @@ class StepMenu extends StatelessWidget {
   Row _buildTitle() {
     return Row(
       children: [
-        Text(
-          title,
-          style: TextStyle(
-              color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
+        Expanded(
+          child: Text(
+            title,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold),
+          ),
         )
       ],
     );

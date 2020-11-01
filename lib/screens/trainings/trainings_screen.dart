@@ -1,15 +1,15 @@
-import 'package:Step/screens/competencies/create_competencies.dart';
-import 'package:Step/screens/competencies/listview_competencies.dart';
-import 'package:Step/widgets/drawer_widget.dart';
+import 'package:Step/screens/trainings/listview_trainings.dart';
 import 'package:flutter/material.dart';
 
-class CompentenciesScreen extends StatefulWidget {
-  static final String id = "compentencies_screen";
+import 'create_trainings_screen.dart';
+
+class TrainingsScreen extends StatefulWidget {
+  static final String id = "trainings_screen";
   @override
-  _CompentenciesState createState() => _CompentenciesState();
+  _TrainingsState createState() => _TrainingsState();
 }
 
-class _CompentenciesState extends State<CompentenciesScreen> {
+class _TrainingsState extends State<TrainingsScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -19,18 +19,22 @@ class _CompentenciesState extends State<CompentenciesScreen> {
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: Colors.blue,
-            title: Text("Gestión de Competencias"),
+            title: Text("Gestión de Capacitaciones"),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => Navigator.push(
+            onPressed: () {
+              Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => CreateCompentenciesScreen())),
+                  builder: (context) => CreateTrainingsScreen(),
+                ),
+              );
+            },
             child: Icon(Icons.add),
             elevation: 10.0,
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          body: ListViewCompetencies(),
+          body: ListViewTrainings(),
         ),
       ),
     );

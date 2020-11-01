@@ -5,6 +5,7 @@ import 'package:Step/services/competencies_service.dart';
 import 'package:Step/screens/competencies/competencies_screen.dart';
 import 'package:Step/widgets/drawer_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CreateCompentenciesScreen extends StatefulWidget {
   static final String id = "create_compentencies_screen";
@@ -62,7 +63,6 @@ class _CreateCompentenciesState extends State<CreateCompentenciesScreen> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          drawer: DrawerWidget(),
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: Colors.blue,

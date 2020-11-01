@@ -65,7 +65,6 @@ class _CreateLanguagesState extends State<CreateLanguagesScreen> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           key: _scaffoldKey,
-          drawer: DrawerWidget(),
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: Colors.blue,
@@ -96,7 +95,7 @@ class _CreateLanguagesState extends State<CreateLanguagesScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            buildTextFieldTitle("Descripción"),
+                            buildTextFieldTitle("Nombre"),
                             buildTextFieldDescription(""),
                             buildTextFieldTitle("Estado"),
                             buildDropDown(),

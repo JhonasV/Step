@@ -6,6 +6,8 @@ import 'package:Step/screens/register_screen.dart';
 import 'package:Step/screens/competencies/competencies_screen.dart';
 import 'package:Step/screens/home_screen.dart';
 import 'package:Step/screens/competencies/create_competencies.dart';
+import 'package:Step/screens/trainings/create_trainings_screen.dart';
+import 'package:Step/screens/trainings/trainings_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -34,7 +36,9 @@ class MyApp extends StatelessWidget {
         LoginScreen.id: (context) => LoginScreen(),
         RegisterScreen.id: (context) => RegisterScreen(),
         LanguagesScreen.id: (context) => LanguagesScreen(),
-        CreateLanguagesScreen.id: (context) => CreateLanguagesScreen()
+        CreateLanguagesScreen.id: (context) => CreateLanguagesScreen(),
+        TrainingsScreen.id: (context) => TrainingsScreen(),
+        CreateTrainingsScreen.id: (context) => CreateTrainingsScreen(),
       },
     );
   }

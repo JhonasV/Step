@@ -15,13 +15,13 @@ class Trainings {
     this.academy,
   });
 
-  factory Trainings.fromMap(Map<String, dynamic> json) {
+  factory Trainings.fromJson(Map<String, dynamic> json) {
     return Trainings(
       id: json['id'],
       description: json['description'],
       level: json['level'],
-      initalDate: json['initialDate'],
-      endDate: json['endDate'],
+      initalDate: DateTime.parse(json['initialDate']),
+      endDate: DateTime.parse(json['endDate']),
       academy: json['academy'],
     );
   }
