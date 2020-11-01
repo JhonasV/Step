@@ -11,33 +11,39 @@ class ListViewTrainings extends StatefulWidget {
 }
 
 class _ListViewTrainingsState extends State<ListViewTrainings> {
-  List<Trainings> trainings = [];
+  List<Trainings> _trainings = [], _auxTrainings = [];
   bool _isLoading = true, deletingLoading = false, _noTrainingsAdded = false;
   _setupFetchTrainings() async {
     var result = await TrainingsService.getAll();
 
     if (result.success) {
       setState(() {
-        trainings = result.data;
+        _trainings = result.data;
+        _auxTrainings = result.data;
         _isLoading = !_isLoading;
         _noTrainingsAdded = result.data.length == 0;
       });
     } else {
       setState(() {
-        trainings = result.data;
+        _trainings = result.data;
+        _auxTrainings = result.data;
         _isLoading = !_isLoading;
         _noTrainingsAdded = false;
       });
     }
   }
 
-  List<Container> _buildList() {
+  Column _buildList() {
     List<Container> listTiles = [];
-    trainings.forEach((element) {
+    _trainings.forEach((element) {
       listTiles.add(_buildListTile(element));
     });
 
-    return listTiles;
+    return Column(
+      children: listTiles,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+    );
   }
 
   @override
@@ -62,7 +68,12 @@ class _ListViewTrainingsState extends State<ListViewTrainings> {
                   ),
                 ),
               )
-            : ListView(children: _buildList());
+            : Column(
+                children: [
+                  _buildTextFieldSearch(),
+                  Expanded(child: _buildList()),
+                ],
+              );
   }
 
   Container _buildListTile(Trainings item) {
@@ -101,10 +112,10 @@ class _ListViewTrainingsState extends State<ListViewTrainings> {
                       setState(() => deletingLoading != deletingLoading);
                       var result = await TrainingsService.delete(item.id);
                       if (result.success) {
-                        var tempTrainings = trainings;
+                        var tempTrainings = _trainings;
                         tempTrainings.remove(item);
                         setState(() {
-                          trainings = tempTrainings;
+                          _trainings = tempTrainings;
                           deletingLoading = false;
                         });
                       } else {
@@ -134,6 +145,31 @@ class _ListViewTrainingsState extends State<ListViewTrainings> {
         ),
       ),
     );
+  }
+
+  Container _buildTextFieldSearch() {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.blue), color: Colors.white),
+      child: TextFormField(
+        onChanged: (input) => _filterManager(input),
+        decoration:
+            InputDecoration(icon: Icon(Icons.search), border: InputBorder.none),
+      ),
+    );
+  }
+
+  void _filterManager(String input) {
+    if (input.length < 3) {
+      setState(() => _trainings = _auxTrainings);
+    } else {
+      var filteredCompentencies = _trainings
+          .where(
+              (e) => e.description.toLowerCase().contains(input.toLowerCase()))
+          .toList();
+
+      setState(() => _trainings = filteredCompentencies);
+    }
   }
 
   Future<bool> showAlertDialog(String text, BuildContext context) async {

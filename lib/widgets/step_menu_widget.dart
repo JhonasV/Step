@@ -28,7 +28,7 @@ class StepMenu extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         child: Container(
           width: double.infinity,
-          height: size.height * .21,
+          height: size.height * .30,
           margin: EdgeInsets.all(20),
           decoration: BoxDecoration(
             // borderRadius: BorderRadius.circular(15),

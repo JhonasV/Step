@@ -75,7 +75,24 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     var menuItems = _getMenuItems();
     List<Widget> menuEl = [];
     var size = MediaQuery.of(context).size;
-    menuEl.add(Container(
+    menuEl.add(_buildDrawerHeader(size));
+    for (var item in menuItems) {
+      for (var role in currentUser.roles) {
+        if (item.access.contains(role.name)) {
+          menuEl.add(_buildListTile(item));
+          break;
+        }
+      }
+    }
+
+    setState(() {
+      menuElements = menuEl;
+      _isLoadinMenuItems = !_isLoadinMenuItems;
+    });
+  }
+
+  Container _buildDrawerHeader(Size size) {
+    return Container(
       height: size.height * .25,
       child: DrawerHeader(
         padding: EdgeInsets.zero,
@@ -133,20 +150,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           color: Colors.blue,
         ),
       ),
-    ));
-    for (var item in menuItems) {
-      for (var role in currentUser.roles) {
-        if (item.access.contains(role.name)) {
-          menuEl.add(_buildListTile(item));
-          break;
-        }
-      }
-    }
-
-    setState(() {
-      menuElements = menuEl;
-      _isLoadinMenuItems = !_isLoadinMenuItems;
-    });
+    );
   }
 
   ListTile _buildListTile(DrawerMenuItem item) {

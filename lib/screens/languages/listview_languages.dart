@@ -10,24 +10,29 @@ class ListViewLanguages extends StatefulWidget {
 }
 
 class _ListViewLanguagesState extends State<ListViewLanguages> {
-  List<Languages> languages = [];
-  bool _isLoading = true, deletingLoading = false, _noLanguagesAdded = false;
+  List<Languages> _languages = [], _auxLanguages = [];
+  bool _isLoading = true, _deletingLoading = false, _noLanguagesAdded = false;
   _setupFetchLanguages() async {
     var languagesFuture = await LanguagesService.getAll();
     setState(() {
-      languages = languagesFuture;
+      _languages = languagesFuture;
+      _auxLanguages = languagesFuture;
       _isLoading = !_isLoading;
       _noLanguagesAdded = languagesFuture.length == 0;
     });
   }
 
-  List<Container> _buildList() {
+  Column _buildList() {
     List<Container> listTiles = [];
-    languages.forEach((element) {
+    _languages.forEach((element) {
       listTiles.add(_buildListTile(element));
     });
 
-    return listTiles;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: listTiles,
+    );
   }
 
   @override
@@ -52,7 +57,36 @@ class _ListViewLanguagesState extends State<ListViewLanguages> {
                   ),
                 ),
               )
-            : ListView(children: _buildList());
+            : Column(
+                children: [
+                  _buildTextFieldSearch(),
+                  Expanded(child: _buildList())
+                ],
+              );
+  }
+
+  Container _buildTextFieldSearch() {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.blue), color: Colors.white),
+      child: TextFormField(
+        onChanged: (input) => _filterManager(input),
+        decoration:
+            InputDecoration(icon: Icon(Icons.search), border: InputBorder.none),
+      ),
+    );
+  }
+
+  void _filterManager(String input) {
+    if (input.length < 3) {
+      setState(() => _languages = _auxLanguages);
+    } else {
+      var filteredCompentencies = _languages
+          .where((e) => e.name.toLowerCase().contains(input.toLowerCase()))
+          .toList();
+
+      setState(() => _languages = filteredCompentencies);
+    }
   }
 
   Container _buildListTile(Languages item) {
@@ -91,14 +125,14 @@ class _ListViewLanguagesState extends State<ListViewLanguages> {
                         "¿Seguro de eliminar este recurso?", context);
 
                     if (deleted) {
-                      setState(() => deletingLoading != deletingLoading);
+                      setState(() => _deletingLoading != _deletingLoading);
                       var result = await LanguagesService.delete(item.id);
                       if (result.success) {
-                        var tempLanguages = languages;
+                        var tempLanguages = _languages;
                         tempLanguages.remove(item);
                         setState(() {
-                          languages = tempLanguages;
-                          deletingLoading = false;
+                          _languages = tempLanguages;
+                          _deletingLoading = false;
                         });
                       } else {
                         await showAlertDialog(
@@ -133,7 +167,7 @@ class _ListViewLanguagesState extends State<ListViewLanguages> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("ADVERTENCIA"),
-      content: deletingLoading
+      content: _deletingLoading
           ? Center(child: CircularProgressIndicator())
           : Text(text),
       actions: [

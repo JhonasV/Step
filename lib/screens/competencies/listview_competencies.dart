@@ -10,24 +10,32 @@ class ListViewCompetencies extends StatefulWidget {
 }
 
 class _ListViewCompetenciesState extends State<ListViewCompetencies> {
-  List<Competencies> competencies = [];
-  bool _isLoading = true, deletingLoading = false, _noCompetenciesAdded = false;
+  List<Competencies> _competencies = [], _auxCompentencies = [];
+  String _query;
+  bool _isLoading = true,
+      _deletingLoading = false,
+      _noCompetenciesAdded = false;
   _setupFetchCompetencies() async {
     var competenciesFuture = await CompetenciesService.getAll();
     setState(() {
-      competencies = competenciesFuture;
+      _competencies = competenciesFuture;
+      _auxCompentencies = competenciesFuture;
       _isLoading = !_isLoading;
       _noCompetenciesAdded = competenciesFuture.length == 0;
     });
   }
 
-  List<Container> _buildList() {
+  Column _buildList() {
     List<Container> listTiles = [];
-    competencies.forEach((element) {
+    _competencies.forEach((element) {
       listTiles.add(_buildListTile(element));
     });
 
-    return listTiles;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: listTiles,
+    );
   }
 
   @override
@@ -52,7 +60,39 @@ class _ListViewCompetenciesState extends State<ListViewCompetencies> {
                   ),
                 ),
               )
-            : ListView(children: _buildList());
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _buildTextFieldSearch(),
+                  Expanded(child: _buildList())
+                ],
+              );
+  }
+
+  Container _buildTextFieldSearch() {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.blue), color: Colors.white),
+      child: TextFormField(
+        onChanged: (input) => _filterManager(input),
+        decoration:
+            InputDecoration(icon: Icon(Icons.search), border: InputBorder.none),
+      ),
+    );
+  }
+
+  void _filterManager(String input) {
+    if (input.length < 3) {
+      setState(() => _competencies = _auxCompentencies);
+    } else {
+      var filteredCompentencies = _competencies
+          .where(
+              (e) => e.description.toLowerCase().contains(input.toLowerCase()))
+          .toList();
+
+      setState(() => _competencies = filteredCompentencies);
+    }
   }
 
   Container _buildListTile(Competencies item) {
@@ -91,14 +131,14 @@ class _ListViewCompetenciesState extends State<ListViewCompetencies> {
                         "¿Seguro de eliminar este recurso?", context);
 
                     if (deleted) {
-                      setState(() => deletingLoading != deletingLoading);
+                      setState(() => _deletingLoading != _deletingLoading);
                       var result = await CompetenciesService.delete(item.id);
                       if (result.success) {
-                        var tempCompetencies = competencies;
+                        var tempCompetencies = _competencies;
                         tempCompetencies.remove(item);
                         setState(() {
-                          competencies = tempCompetencies;
-                          deletingLoading = false;
+                          _competencies = tempCompetencies;
+                          _deletingLoading = false;
                         });
                       } else {
                         await showAlertDialog(
@@ -131,7 +171,7 @@ class _ListViewCompetenciesState extends State<ListViewCompetencies> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("ADVERTENCIA"),
-      content: deletingLoading
+      content: _deletingLoading
           ? Center(child: CircularProgressIndicator())
           : Text(text),
       actions: [
