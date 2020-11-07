@@ -38,7 +38,7 @@ List<Map<String, dynamic>> stepMenuItems = [
     "imageUrl": "assets/images/job_roles.jpg",
     "color1": Colors.black,
     "color2": Colors.grey[200],
-    "screenPath": "",
+    "screenPath": "jobpositions_screen",
     "access": ["admin"]
   },
   {
