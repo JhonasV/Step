@@ -52,7 +52,7 @@ class _ListViewJobPositionsState extends State<ListViewJobPositions> {
                 margin: EdgeInsets.only(top: 60.0),
                 alignment: Alignment.topCenter,
                 child: Text(
-                  "No hay lenguajes creados...",
+                  "No hay puestos creados...",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,

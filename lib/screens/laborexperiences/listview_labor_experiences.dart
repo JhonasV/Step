@@ -1,30 +1,34 @@
-import 'package:Step/models/languages.dart';
-import 'package:Step/screens/languages/create_languages.dart';
+import 'package:Step/models/labor_experience.dart';
+import 'package:Step/screens/laborexperiences/create_labor_experiences_screen.dart';
+import 'package:Step/services/labor_experience_service.dart';
 import 'package:Step/services/languages_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ListViewLanguages extends StatefulWidget {
-  final String id = "listview_Languages_screen";
-  _ListViewLanguagesState createState() => _ListViewLanguagesState();
+class ListViewLaborExperience extends StatefulWidget {
+  final String id = "listview_LaborExperience_screen";
+  _ListViewLaborExperienceState createState() =>
+      _ListViewLaborExperienceState();
 }
 
-class _ListViewLanguagesState extends State<ListViewLanguages> {
-  List<Languages> _languages = [], _auxLanguages = [];
-  bool _isLoading = true, _deletingLoading = false, _noLanguagesAdded = false;
+class _ListViewLaborExperienceState extends State<ListViewLaborExperience> {
+  List<LaborExperience> _laborExperiences = [], _auxLaborExperiences = [];
+  bool _isLoading = true,
+      _deletingLoading = false,
+      _noLaborExperiencesAdded = false;
   _setupFetchLanguages() async {
-    var languagesFuture = await LanguagesService.getAll();
+    var laborExperiencesFuture = await LaborExperienceService.getAll();
     setState(() {
-      _languages = languagesFuture;
-      _auxLanguages = languagesFuture;
+      _laborExperiences = laborExperiencesFuture.data;
+      _auxLaborExperiences = laborExperiencesFuture.data;
       _isLoading = !_isLoading;
-      _noLanguagesAdded = languagesFuture.length == 0;
+      _noLaborExperiencesAdded = laborExperiencesFuture.data.length == 0;
     });
   }
 
   Column _buildList() {
     List<Container> listTiles = [];
-    _languages.forEach((element) {
+    _laborExperiences.forEach((element) {
       listTiles.add(_buildListTile(element));
     });
 
@@ -45,7 +49,7 @@ class _ListViewLanguagesState extends State<ListViewLanguages> {
   Widget build(BuildContext context) {
     return _isLoading
         ? Center(child: Center(child: CircularProgressIndicator()))
-        : _noLanguagesAdded
+        : _noLaborExperiencesAdded
             ? Container(
                 margin: EdgeInsets.only(top: 60.0),
                 alignment: Alignment.topCenter,
@@ -79,17 +83,17 @@ class _ListViewLanguagesState extends State<ListViewLanguages> {
 
   void _filterManager(String input) {
     if (input.length < 3) {
-      setState(() => _languages = _auxLanguages);
+      setState(() => _laborExperiences = _auxLaborExperiences);
     } else {
-      var filteredCompentencies = _languages
-          .where((e) => e.name.toLowerCase().contains(input.toLowerCase()))
+      var filteredCompentencies = _laborExperiences
+          .where((e) => e.position.toLowerCase().contains(input.toLowerCase()))
           .toList();
 
-      setState(() => _languages = filteredCompentencies);
+      setState(() => _laborExperiences = filteredCompentencies);
     }
   }
 
-  Container _buildListTile(Languages item) {
+  Container _buildListTile(LaborExperience item) {
     return Container(
       margin: EdgeInsets.all(15),
       decoration: BoxDecoration(
@@ -104,14 +108,14 @@ class _ListViewLanguagesState extends State<ListViewLanguages> {
       ),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: item.status == 1 ? Colors.green : Colors.grey,
+          backgroundColor: Colors.green,
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Text(
-                item.name,
+                item.position,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19.0),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -128,10 +132,10 @@ class _ListViewLanguagesState extends State<ListViewLanguages> {
                       setState(() => _deletingLoading != _deletingLoading);
                       var result = await LanguagesService.delete(item.id);
                       if (result.success) {
-                        var tempLanguages = _languages;
-                        tempLanguages.remove(item);
+                        var tempLaborExperiences = _laborExperiences;
+                        tempLaborExperiences.remove(item);
                         setState(() {
-                          _languages = tempLanguages;
+                          _laborExperiences = tempLaborExperiences;
                           _deletingLoading = false;
                         });
                       } else {
@@ -150,7 +154,7 @@ class _ListViewLanguagesState extends State<ListViewLanguages> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) =>
-                            CreateLanguagesScreen(languages: item),
+                            CreateLaborExperiencesScreen(laborExperience: item),
                       ),
                     );
                   },

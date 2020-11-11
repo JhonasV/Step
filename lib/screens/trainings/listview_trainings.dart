@@ -68,7 +68,7 @@ class _ListViewTrainingsState extends State<ListViewTrainings> {
                   ),
                 ),
               )
-            : Column(
+            : ListView(
                 children: [
                   _buildTextFieldSearch(),
                   Expanded(child: _buildList()),

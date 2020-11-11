@@ -60,9 +60,7 @@ class _ListViewCompetenciesState extends State<ListViewCompetencies> {
                   ),
                 ),
               )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+            : ListView(
                 children: [
                   _buildTextFieldSearch(),
                   Expanded(child: _buildList())
