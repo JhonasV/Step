@@ -1,6 +1,6 @@
 import 'package:Step/models/user.dart';
 
-class LaborExperience {
+class LaborExperiences {
   int id;
   String company;
   String position;
@@ -12,17 +12,18 @@ class LaborExperience {
   DateTime createAt;
   DateTime updatedAt;
 
-  LaborExperience(
+  LaborExperiences(
       {this.id,
       this.userId,
       this.company,
       this.initialDate,
       this.endDate,
       this.salary,
-      this.position});
+      this.position,
+      this.user});
 
-  factory LaborExperience.fromJson(Map<String, dynamic> json) {
-    return LaborExperience(
+  factory LaborExperiences.fromJson(Map<String, dynamic> json) {
+    return LaborExperiences(
       id: json['id'],
       company: json['company'],
       userId: json['userId'],
@@ -30,18 +31,21 @@ class LaborExperience {
       endDate: DateTime.parse(json['endDate']),
       salary: json['salary'] / 1,
       position: json['position'],
+      user:
+          json['users'] == null ? json['users'] : User.fromJson(json['users']),
     );
   }
 
-  Map<String, dynamic> toMap(LaborExperience laborExperience) {
+  Map<String, dynamic> toMap(LaborExperiences laborExperience) {
     return {
-      "id": laborExperience.id,
+      "id": laborExperience.id == null ? 0 : laborExperience.id,
       'company': laborExperience.company,
       'initialDate':
           laborExperience.initialDate.toLocal().toString().split(' ')[0],
       'endDate': laborExperience.endDate.toLocal().toString().split(' ')[0],
       'salary': laborExperience.salary,
       'position': laborExperience.position,
+      'userId': laborExperience.userId
     };
   }
 }

@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         TrainingsScreen.id: (context) => TrainingsScreen(),
         CreateTrainingsScreen.id: (context) => CreateTrainingsScreen(),
         JobPositionsScreen.id: (context) => JobPositionsScreen(),
-        LaborExperienceScreen.id: (context) => LaborExperienceScreen()
+        LaborExperiencesScreen.id: (context) => LaborExperiencesScreen()
       },
     );
   }

@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 import 'package:Step/config/api_config.dart';
-import 'package:Step/models/labor_experience.dart';
+import 'package:Step/models/labor_experiences.dart';
 import 'package:Step/models/taskresult.dart';
 
 import 'auth_service.dart';
 import 'package:http/http.dart' as http;
 
-class LaborExperienceService {
-  static Future<TaskResult<List<LaborExperience>>> getAll() async {
-    TaskResult<List<LaborExperience>> result =
-        new TaskResult<List<LaborExperience>>();
+class LaborExperiencesService {
+  static Future<TaskResult<List<LaborExperiences>>> getAll() async {
+    TaskResult<List<LaborExperiences>> result =
+        new TaskResult<List<LaborExperiences>>();
     var token = await AuthService.getToken();
 
     try {
@@ -31,11 +31,37 @@ class LaborExperienceService {
     return result;
   }
 
+  static Future<TaskResult<List<LaborExperiences>>> getAllByCurrentUser(
+      int userId) async {
+    TaskResult<List<LaborExperiences>> result =
+        new TaskResult<List<LaborExperiences>>();
+    var token = await AuthService.getToken();
+
+    try {
+      http.Response response = await http.get(
+        "$API_URI/laborexperiences/getlistbyuserid/$userId",
+        headers: {"Authorization": "Bearer $token"},
+      );
+
+      if (response.statusCode == 200) {
+        final bodyDecoded = jsonDecode(response.body);
+        result.data = parseLaborExperience(bodyDecoded["data"]);
+        result.success = true;
+      }
+    } catch (e) {
+      result.messages = e.toString();
+    }
+
+    return result;
+  }
+
   static Future<TaskResult<bool>> create(
-      LaborExperience laborExperience) async {
+      LaborExperiences laborExperience) async {
     var result = new TaskResult<bool>();
     try {
       var token = await AuthService.getToken();
+      var currentUser = await AuthService.current();
+      laborExperience.userId = currentUser.data.id;
       http.Response response = await http.post(
         "$API_URI/laborexperiences",
         body: jsonEncode(laborExperience.toMap(laborExperience)),
@@ -60,7 +86,7 @@ class LaborExperienceService {
   }
 
   static Future<TaskResult<bool>> update(
-      LaborExperience laborExperience) async {
+      LaborExperiences laborExperience) async {
     var result = new TaskResult<bool>();
     try {
       var token = await AuthService.getToken();
@@ -108,9 +134,9 @@ class LaborExperienceService {
     return result;
   }
 
-  static List<LaborExperience> parseLaborExperience(dynamic responseBody) {
+  static List<LaborExperiences> parseLaborExperience(dynamic responseBody) {
     return responseBody
-        .map<LaborExperience>((json) => LaborExperience.fromJson(json))
+        .map<LaborExperiences>((json) => LaborExperiences.fromJson(json))
         .toList();
   }
 }

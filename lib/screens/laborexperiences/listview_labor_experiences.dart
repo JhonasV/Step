@@ -1,5 +1,7 @@
-import 'package:Step/models/labor_experience.dart';
+import 'package:Step/models/labor_experiences.dart';
+import 'package:Step/models/taskresult.dart';
 import 'package:Step/screens/laborexperiences/create_labor_experiences_screen.dart';
+import 'package:Step/services/auth_service.dart';
 import 'package:Step/services/labor_experience_service.dart';
 import 'package:Step/services/languages_service.dart';
 import 'package:flutter/material.dart';
@@ -12,12 +14,22 @@ class ListViewLaborExperience extends StatefulWidget {
 }
 
 class _ListViewLaborExperienceState extends State<ListViewLaborExperience> {
-  List<LaborExperience> _laborExperiences = [], _auxLaborExperiences = [];
+  List<LaborExperiences> _laborExperiences = [], _auxLaborExperiences = [];
   bool _isLoading = true,
       _deletingLoading = false,
       _noLaborExperiencesAdded = false;
-  _setupFetchLanguages() async {
-    var laborExperiencesFuture = await LaborExperienceService.getAll();
+  _setupFetchLaborExperiences() async {
+    var currentUser = await AuthService.current();
+    TaskResult<List<LaborExperiences>> laborExperiencesFuture;
+    var isAdmin = currentUser.data.roles.any((e) => e.name.contains("admin"));
+    if (!isAdmin) {
+      laborExperiencesFuture =
+          await LaborExperiencesService.getAllByCurrentUser(
+              currentUser.data.id);
+    } else {
+      laborExperiencesFuture = await LaborExperiencesService.getAll();
+    }
+
     setState(() {
       _laborExperiences = laborExperiencesFuture.data;
       _auxLaborExperiences = laborExperiencesFuture.data;
@@ -42,7 +54,7 @@ class _ListViewLaborExperienceState extends State<ListViewLaborExperience> {
   @override
   void initState() {
     super.initState();
-    _setupFetchLanguages();
+    _setupFetchLaborExperiences();
   }
 
   @override
@@ -54,11 +66,12 @@ class _ListViewLaborExperienceState extends State<ListViewLaborExperience> {
                 margin: EdgeInsets.only(top: 60.0),
                 alignment: Alignment.topCenter,
                 child: Text(
-                  "No hay lenguajes creados...",
+                  "No has agregado ninguna experiencia laboral...",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               )
             : ListView(
@@ -93,7 +106,7 @@ class _ListViewLaborExperienceState extends State<ListViewLaborExperience> {
     }
   }
 
-  Container _buildListTile(LaborExperience item) {
+  Container _buildListTile(LaborExperiences item) {
     return Container(
       margin: EdgeInsets.all(15),
       decoration: BoxDecoration(
@@ -110,6 +123,17 @@ class _ListViewLaborExperienceState extends State<ListViewLaborExperience> {
         leading: CircleAvatar(
           backgroundColor: Colors.green,
         ),
+        subtitle:
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            "Salario ${item.salary} | ${item.company}",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+          ),
+          Text(
+            "Desde ${item.initialDate.toString().split(' ')[0]} | Hasta ${item.endDate.toString().split(' ')[0]}",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+          ),
+        ]),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -130,7 +154,8 @@ class _ListViewLaborExperienceState extends State<ListViewLaborExperience> {
 
                     if (deleted) {
                       setState(() => _deletingLoading != _deletingLoading);
-                      var result = await LanguagesService.delete(item.id);
+                      var result =
+                          await LaborExperiencesService.delete(item.id);
                       if (result.success) {
                         var tempLaborExperiences = _laborExperiences;
                         tempLaborExperiences.remove(item);
@@ -153,8 +178,8 @@ class _ListViewLaborExperienceState extends State<ListViewLaborExperience> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) =>
-                            CreateLaborExperiencesScreen(laborExperience: item),
+                        builder: (context) => CreateLaborExperiencesScreen(
+                            laborExperiences: item),
                       ),
                     );
                   },

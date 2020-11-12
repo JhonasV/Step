@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'create_labor_experiences_screen.dart';
 import 'listview_labor_experiences.dart';
 
-class LaborExperienceScreen extends StatefulWidget {
+class LaborExperiencesScreen extends StatefulWidget {
   static final String id = "labor_experiences_screen";
   @override
-  _LaborExperienceState createState() => _LaborExperienceState();
+  _LaborExperiencesScreen createState() => _LaborExperiencesScreen();
 }
 
-class _LaborExperienceState extends State<LaborExperienceScreen> {
+class _LaborExperiencesScreen extends State<LaborExperiencesScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
