@@ -36,4 +36,10 @@ class Trainings {
       'academy': trainings.academy,
     };
   }
+
+  static List<Trainings> toList(dynamic responseBody) {
+    return responseBody
+        .map<Trainings>((json) => Trainings.fromJson(json))
+        .toList();
+  }
 }

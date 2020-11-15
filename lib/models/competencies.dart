@@ -17,4 +17,10 @@ class Competencies {
   Map<String, dynamic> toMap(Competencies competencies) {
     return {"description": competencies.description};
   }
+
+  static List<Competencies> toList(dynamic responseBody) {
+    return responseBody
+        .map<Competencies>((json) => Competencies.fromJson(json))
+        .toList();
+  }
 }

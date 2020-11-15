@@ -18,7 +18,7 @@ class TrainingsService {
 
       if (response.statusCode == 200) {
         final bodyDecoded = json.decode(response.body);
-        result.data = parseTrainings(bodyDecoded["data"]);
+        result.data = Trainings.toList(bodyDecoded["data"]);
         result.success = true;
       }
     } catch (e) {
@@ -116,11 +116,5 @@ class TrainingsService {
     }
 
     return result;
-  }
-
-  static List<Trainings> parseTrainings(dynamic responseBody) {
-    return responseBody
-        .map<Trainings>((json) => Trainings.fromJson(json))
-        .toList();
   }
 }

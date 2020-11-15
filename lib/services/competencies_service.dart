@@ -19,7 +19,7 @@ class CompetenciesService {
 
       if (response.statusCode == 200) {
         final bodyDecoded = json.decode(response.body);
-        result = parseCompetencies(bodyDecoded["data"]);
+        result = Competencies.toList(bodyDecoded["data"]);
       }
     } catch (e) {
       print(e.message);
@@ -106,11 +106,5 @@ class CompetenciesService {
     }
 
     return result;
-  }
-
-  static List<Competencies> parseCompetencies(dynamic responseBody) {
-    return responseBody
-        .map<Competencies>((json) => Competencies.fromJson(json))
-        .toList();
   }
 }

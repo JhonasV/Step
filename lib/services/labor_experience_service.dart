@@ -21,7 +21,7 @@ class LaborExperiencesService {
 
       if (response.statusCode == 200) {
         final bodyDecoded = jsonDecode(response.body);
-        result.data = parseLaborExperience(bodyDecoded["data"]);
+        result.data = LaborExperiences.toList(bodyDecoded["data"]);
         result.success = true;
       }
     } catch (e) {
@@ -45,7 +45,7 @@ class LaborExperiencesService {
 
       if (response.statusCode == 200) {
         final bodyDecoded = jsonDecode(response.body);
-        result.data = parseLaborExperience(bodyDecoded["data"]);
+        result.data = LaborExperiences.toList(bodyDecoded["data"]);
         result.success = true;
       }
     } catch (e) {
@@ -132,11 +132,5 @@ class LaborExperiencesService {
     }
 
     return result;
-  }
-
-  static List<LaborExperiences> parseLaborExperience(dynamic responseBody) {
-    return responseBody
-        .map<LaborExperiences>((json) => LaborExperiences.fromJson(json))
-        .toList();
   }
 }

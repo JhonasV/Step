@@ -48,4 +48,10 @@ class LaborExperiences {
       'userId': laborExperience.userId
     };
   }
+
+  static List<LaborExperiences> toList(dynamic responseBody) {
+    return responseBody
+        .map<LaborExperiences>((json) => LaborExperiences.fromJson(json))
+        .toList();
+  }
 }

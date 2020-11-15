@@ -1,6 +1,3 @@
-import 'dart:ffi';
-
-import 'package:Step/screens/competencies/competencies_screen.dart';
 import 'package:flutter/material.dart';
 
 class StepMenu extends StatelessWidget {
@@ -46,44 +43,47 @@ class StepMenu extends StatelessWidget {
               end: Alignment(1.0, 1.0),
             ),
           ),
-          child: Column(
-            children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    Opacity(
-                      opacity: 0.3,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(imageUrl),
-                            fit: BoxFit.fill,
+          child: Hero(
+            tag: screenPath,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Opacity(
+                        opacity: 0.3,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(imageUrl),
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 20),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15.0, vertical: 18.0),
-                      child: Column(
-                        children: [
-                          _buildTitle(),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: _buildSubtitle(),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10.0),
-                            child: _buildButton(context),
-                          )
-                        ],
+                      Container(
+                        margin: EdgeInsets.only(top: 20),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 18.0),
+                        child: Column(
+                          children: [
+                            _buildTitle(),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: _buildSubtitle(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 10.0),
+                              child: _buildButton(context),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -94,18 +94,6 @@ class StepMenu extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        // FlatButton(
-        //   color: Colors.white,
-        //   onPressed: () => Navigator.pushNamed(context, CompentenciesScreen.id),
-        //   child: Text(
-        //     "Start",
-        //     style: TextStyle(
-        //       fontWeight: FontWeight.bold,
-        //       fontSize: 17.0,
-        //       color: Colors.green[300],
-        //     ),
-        //   ),
-        // ),
         Icon(
           Icons.arrow_right_rounded,
           color: Colors.white,
