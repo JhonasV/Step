@@ -7,14 +7,17 @@ class StepMenu extends StatelessWidget {
   final String imageUrl;
   final Color color1, color2;
   final String screenPath;
-  StepMenu(
-      {this.title,
-      this.subtitle,
-      this.icon,
-      this.imageUrl,
-      this.color1,
-      this.color2,
-      this.screenPath});
+  final bool useHero;
+  StepMenu({
+    this.title,
+    this.subtitle,
+    this.icon,
+    this.imageUrl,
+    this.color1,
+    this.color2,
+    this.screenPath,
+    this.useHero,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +31,11 @@ class StepMenu extends StatelessWidget {
           height: size.height * .30,
           margin: EdgeInsets.all(20),
           decoration: BoxDecoration(
-            // borderRadius: BorderRadius.circular(15),
             color: Color.fromRGBO(248, 249, 255, 0.8),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey,
-                offset: Offset(0.0, 1.0), //(x,y)
+                offset: Offset(0.0, 1.0),
                 blurRadius: 6.0,
               )
             ],
@@ -43,50 +45,50 @@ class StepMenu extends StatelessWidget {
               end: Alignment(1.0, 1.0),
             ),
           ),
-          child: Hero(
-            tag: screenPath,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Opacity(
-                        opacity: 0.3,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(imageUrl),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 15.0, vertical: 18.0),
-                        child: Column(
-                          children: [
-                            _buildTitle(),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: _buildSubtitle(),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 10.0),
-                              child: _buildButton(context),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _buildColumn(context),
         ),
       ),
+    );
+  }
+
+  Widget _buildColumn(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: Stack(
+            children: [
+              Opacity(
+                opacity: 0.3,
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(imageUrl),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 18.0),
+                child: Column(
+                  children: [
+                    _buildTitle(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: _buildSubtitle(),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.0),
+                      child: _buildButton(context),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

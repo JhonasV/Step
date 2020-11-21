@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:Step/screens/applicants/applicants_screen.dart';
+import 'package:Step/screens/applicants/create_applicants_screen.dart';
 import 'package:Step/screens/jobpositions/jobpositions_screen.dart';
 import 'package:Step/screens/laborexperiences/labor_experiences_screen.dart';
 import 'package:Step/screens/languages/create_languages.dart';
@@ -44,7 +45,8 @@ class MyApp extends StatelessWidget {
         CreateTrainingsScreen.id: (context) => CreateTrainingsScreen(),
         JobPositionsScreen.id: (context) => JobPositionsScreen(),
         LaborExperiencesScreen.id: (context) => LaborExperiencesScreen(),
-        ApplicantsScreen.id: (context) => ApplicantsScreen()
+        ApplicantsScreen.id: (context) => ApplicantsScreen(),
+        CreateApplicantsScreen.id: (context) => CreateApplicantsScreen()
       },
     );
   }

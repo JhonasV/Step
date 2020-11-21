@@ -8,12 +8,14 @@ import 'package:Step/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 class ApplicantsService {
+  static String _url = "jhonasv-001-site1.ctempurl.com";
+
   static Future<List<Applicants>> getAll() async {
     List<Applicants> result = new List();
     String token = await AuthService.getToken();
 
     try {
-      var url = Uri.http(API_URI, '/applicants');
+      var url = new Uri.http(_url, '/api/v1/applicants');
       http.Response response = await http.get(
         url,
         headers: {
@@ -28,7 +30,9 @@ class ApplicantsService {
       } else {
         throw new Exception(response.body);
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
 
     return result;
   }

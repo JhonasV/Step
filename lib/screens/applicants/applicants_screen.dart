@@ -1,7 +1,12 @@
+import 'package:Step/screens/applicants/create_applicants_screen.dart';
+import 'package:Step/screens/applicants/listview_applicants.dart';
+import 'package:Step/widgets/step_menu_widget.dart';
 import 'package:flutter/material.dart';
 
 class ApplicantsScreen extends StatefulWidget {
   static final String id = "applicants_screen";
+  final dynamic menuItem;
+  ApplicantsScreen({this.menuItem});
   @override
   _ApplicantsScreenState createState() => _ApplicantsScreenState();
 }
@@ -11,20 +16,19 @@ class _ApplicantsScreenState extends State<ApplicantsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Mantenimiento de aplicantes"),
+        title: Text("Candidatos"),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CreateApplicantsScreen()));
+        },
       ),
       body: Center(
-        child: Hero(
-          tag: ApplicantsScreen.id,
-          child: Container(
-            height: 300,
-            width: 300,
-            child: Text(""),
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/candidates.jpg"))),
-          ),
-        ),
+        child: ListViewApplicants(),
       ),
     );
   }
