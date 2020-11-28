@@ -13,12 +13,12 @@ class _ListViewApplicantsState extends State<ListViewApplicants> {
   String _query;
   bool _isLoading = true, _deletingLoading = false, _noApplicantsAdded = false;
   _setupFetchApplicants() async {
-    var applicantsFuture = await ApplicantsService.getAll();
+    var result = await ApplicantsService.getAll();
     setState(() {
-      _applicants = applicantsFuture;
-      _auxApplicants = applicantsFuture;
+      _applicants = result.data;
+      _auxApplicants = result.data;
       _isLoading = !_isLoading;
-      _noApplicantsAdded = applicantsFuture.length == 0;
+      _noApplicantsAdded = result.data.length == 0;
     });
   }
 

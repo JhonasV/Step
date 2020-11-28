@@ -15,12 +15,12 @@ class _ListViewJobPositionsState extends State<ListViewJobPositions> {
       _deletingLoading = false,
       _noJobPositionsAdded = false;
   _setupFetchJobPositions() async {
-    var jobPositionsFuture = await JobPositionsService.getAll();
+    var result = await JobPositionsService.getAll();
     setState(() {
-      _jobPositions = jobPositionsFuture;
-      _auxJobPositions = jobPositionsFuture;
+      _jobPositions = result.data;
+      _auxJobPositions = result.data;
       _isLoading = !_isLoading;
-      _noJobPositionsAdded = jobPositionsFuture.length == 0;
+      _noJobPositionsAdded = result.data.length == 0;
     });
   }
 

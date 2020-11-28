@@ -16,12 +16,12 @@ class _ListViewCompetenciesState extends State<ListViewCompetencies> {
       _deletingLoading = false,
       _noCompetenciesAdded = false;
   _setupFetchCompetencies() async {
-    var competenciesFuture = await CompetenciesService.getAll();
+    var result = await CompetenciesService.getAll();
     setState(() {
-      _competencies = competenciesFuture;
-      _auxCompentencies = competenciesFuture;
+      _competencies = result.data;
+      _auxCompentencies = result.data;
       _isLoading = !_isLoading;
-      _noCompetenciesAdded = competenciesFuture.length == 0;
+      _noCompetenciesAdded = result.data.length == 0;
     });
   }
 

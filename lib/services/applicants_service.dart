@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:Step/config/api_config.dart';
 import 'package:Step/models/applicants.dart';
+import 'package:Step/models/taskresult.dart';
 import 'package:Step/services/auth_service.dart';
 
 import 'package:http/http.dart' as http;
@@ -10,8 +9,8 @@ import 'package:http/http.dart' as http;
 class ApplicantsService {
   static String _url = "jhonasv-001-site1.ctempurl.com";
 
-  static Future<List<Applicants>> getAll() async {
-    List<Applicants> result = new List();
+  static Future<TaskResult<List<Applicants>>> getAll() async {
+    TaskResult<List<Applicants>> result = new TaskResult<List<Applicants>>();
     String token = await AuthService.getToken();
 
     try {
@@ -26,7 +25,8 @@ class ApplicantsService {
 
       if (response.statusCode == 200) {
         var dataDecoded = json.decode(response.body);
-        result = Applicants.toList(dataDecoded['data']);
+        result.data = Applicants.toList(dataDecoded['data']);
+        result.success = true;
       } else {
         throw new Exception(response.body);
       }
@@ -35,5 +35,9 @@ class ApplicantsService {
     }
 
     return result;
+  }
+
+  static Future<TaskResult<bool>> create(Applicants app) {
+    TaskResult<bool> result = new TaskResult<bool>();
   }
 }

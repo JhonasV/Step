@@ -1,7 +1,13 @@
 import 'package:Step/models/competencies.dart';
+import 'package:Step/models/jobpositions.dart';
 import 'package:Step/models/labor_experiences.dart';
 import 'package:Step/models/trainings.dart';
+import 'package:Step/services/competencies_service.dart';
+import 'package:Step/services/jobpositions_service.dart';
+import 'package:Step/services/labor_experience_service.dart';
+import 'package:Step/services/trainings_service.dart';
 import 'package:flutter/material.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 class CreateApplicantsScreen extends StatefulWidget {
   static final String id = "create_applicants_screen";
@@ -11,6 +17,8 @@ class CreateApplicantsScreen extends StatefulWidget {
 
 class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   String _documentNumber = '',
       _name = '',
       _department = '',
@@ -21,12 +29,113 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
   List<int> _laborExperiencesSelected = [];
   List<int> _trainingsSelected = [];
 
+  List<Competencies> _competencies = [];
+  List<LaborExperiences> _laborExperiences = [];
+  List<Trainings> _trainings = [];
+  List<JobPositions> _jobPositions = [];
+
+  bool _loadingCompetencies = true,
+      _loadingLaborExperiences = true,
+      _loadingTrainings = true,
+      _loadingJoPositions = true;
+
   bool _isLoading = false, _isUpdated = false;
-  _onSubmit() {
-    if (_formKey.currentState.validate()) {
-      print('Valor actual de _name');
-      print(_name);
+  @override
+  void initState() {
+    super.initState();
+
+    _setupCompetencies();
+    _setupLaborExperiences();
+    _setupTrainings();
+    _setupJobPositions();
+  }
+
+  _setupJobPositions() async {
+    var result = await JobPositionsService.getAll();
+
+    if (result.success) {
+      setState(() {
+        _jobPositions = result.data;
+      });
+    } else {
+      final snackBar = SnackBar(
+        content: Text(
+          result.messages,
+          style: TextStyle(fontSize: 19.5, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.red,
+      );
+      _scaffoldKey.currentState.showSnackBar(snackBar);
     }
+
+    setState(() => _loadingJoPositions = !_loadingJoPositions);
+  }
+
+  _setupCompetencies() async {
+    var result = await CompetenciesService.getAll();
+
+    if (result.success) {
+      setState(() {
+        _competencies = result.data;
+      });
+    } else {
+      final snackBar = SnackBar(
+        content: Text(
+          result.messages,
+          style: TextStyle(fontSize: 19.5, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.red,
+      );
+      _scaffoldKey.currentState.showSnackBar(snackBar);
+    }
+
+    setState(() => _loadingCompetencies = !_loadingCompetencies);
+  }
+
+  _setupLaborExperiences() async {
+    var result = await LaborExperiencesService.getAll();
+
+    if (result.success) {
+      setState(() {
+        _laborExperiences = result.data;
+      });
+    } else {
+      final snackBar = SnackBar(
+        content: Text(
+          result.messages,
+          style: TextStyle(fontSize: 19.5, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.red,
+      );
+      _scaffoldKey.currentState.showSnackBar(snackBar);
+    }
+
+    setState(() => _loadingLaborExperiences = !_loadingLaborExperiences);
+  }
+
+  _setupTrainings() async {
+    var result = await TrainingsService.getAll();
+
+    if (result.success) {
+      setState(() {
+        _trainings = result.data;
+      });
+    } else {
+      final snackBar = SnackBar(
+        content: Text(
+          result.messages,
+          style: TextStyle(fontSize: 19.5, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.red,
+      );
+      _scaffoldKey.currentState.showSnackBar(snackBar);
+    }
+
+    setState(() => _loadingTrainings = !_loadingTrainings);
+  }
+
+  _onSubmit() {
+    if (_formKey.currentState.validate()) {}
   }
 
   @override
@@ -66,13 +175,10 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
                       _buildTextFieldTitle("Recomendado por"),
                       _buildTextFieldRecommendedBy(),
                       _buildTextFieldTitle("Posicion"),
-                      _buildTextFieldPosition(),
-                      _buildTextFieldTitle("Competencias"),
-                      _buildDropDownCompetencies(),
-                      _buildTextFieldTitle("Experiencia laboral"),
-                      _buildDropDownLaborExperiences(),
-                      _buildTextFieldTitle("Capacitaciones"),
-                      _buildDropDownTrainings(),
+                      _buildDropDownJobPositions(),
+                      _buildCompentenciesMultiSelect(),
+                      _buildLaborExperiencesMultiSelect(),
+                      _buildTrainigsMultiSelect(),
                       _buildFlatButton(),
                     ],
                   ),
@@ -84,8 +190,6 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
       ),
     );
   }
-
-  Text _buildTitle() => Text("Formulario de candidatos");
 
   Container _buildTextFieldTitle(String text) {
     return Container(
@@ -197,7 +301,16 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
     );
   }
 
-  Container _buildTextFieldPosition() {
+  _buildCompentenciesMultiSelect() {
+    var dataSource = [];
+
+    for (Competencies comp in _competencies) {
+      Map<String, dynamic> dataSourceItem = {};
+      dataSourceItem["display"] = comp.description;
+      dataSourceItem["value"] = comp.id;
+      dataSource.add(dataSourceItem);
+    }
+
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: Colors.blue),
@@ -205,18 +318,36 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
           color: Colors.white),
       margin: EdgeInsets.only(bottom: 30.0),
       padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: TextFormField(
-        initialValue: _position,
-        validator: (input) =>
-            input.length < 5 ? "Ingresar mÍnimo 5 carácteres" : null,
-        onSaved: (input) => _position = input.trim(),
-        style: TextStyle(fontSize: 21.0),
-        decoration: InputDecoration(border: InputBorder.none),
+      child: MultiSelectFormField(
+        autovalidate: false,
+        chipBackGroundColor: Colors.blue,
+        chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+        dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
+        checkBoxActiveColor: Colors.blue,
+        checkBoxCheckColor: Colors.green,
+        title: _buildTextFieldTitle("Competencias"),
+        dataSource: dataSource,
+        textField: 'display',
+        valueField: 'value',
+        okButtonLabel: 'OK',
+        cancelButtonLabel: 'CANCELAR',
+        hintWidget: Text('Selecciona tus competencias'),
+        initialValue: _compentenciesSelected,
+        onSaved: (values) {
+          if (values == null) return;
+          setState(
+            () {
+              for (int id in values) {
+                _compentenciesSelected.add(id);
+              }
+            },
+          );
+        },
       ),
     );
   }
 
-  Container _buildDropDownCompetencies() {
+  Container _buildDropDownJobPositions() {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: Colors.blue),
@@ -228,129 +359,131 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
       child: DropdownButtonFormField<int>(
         decoration: InputDecoration(border: InputBorder.none),
         value: 0,
-        items: [
-          DropdownMenuItem<int>(
-            child: Text('Selecciona una competencia'),
-            value: 0,
-          ),
-          DropdownMenuItem<int>(
-            child: Row(
-              children: [
-                Text(
-                  'Buena comunicacion',
-                ),
-                _isCompetencieSelected(1)
-                    ? Icon(Icons.select_all_rounded)
-                    : SizedBox.shrink(),
-              ],
-            ),
-            value: 1,
-          ),
-          DropdownMenuItem<int>(
-            child: Text('Buen teamplayer'),
-            value: 2,
-          ),
-        ],
-        onChanged: (int newValue) => _onCompetenciesSelectedChange(newValue),
+        items: _populateJobPositionsDropDown(),
+        onChanged: (int newValue) {},
       ),
     );
   }
 
-  Container _buildDropDownLaborExperiences() {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.blue),
-          borderRadius: BorderRadius.circular(6.0),
-          color: Colors.white),
-      padding: EdgeInsets.all(8.0),
-      margin: EdgeInsets.only(bottom: 40.0),
-      width: double.infinity,
-      child: DropdownButtonFormField<int>(
-        decoration: InputDecoration(border: InputBorder.none),
-        value: 0,
-        items: [
-          DropdownMenuItem<int>(
-            child: Text('Selecciona una competencia'),
-            value: 0,
-          ),
-          DropdownMenuItem<int>(
-            child: Row(
-              children: [
-                Text(
-                  'Buena comunicacion',
-                ),
-                _isCompetencieSelected(1)
-                    ? Icon(Icons.select_all_rounded)
-                    : SizedBox.shrink(),
-              ],
-            ),
-            value: 1,
-          ),
-          DropdownMenuItem<int>(
-            child: Text('Buen teamplayer'),
-            value: 2,
-          ),
-        ],
-        onChanged: (int newValue) => _onCompetenciesSelectedChange(newValue),
-      ),
-    );
-  }
+  _populateJobPositionsDropDown() {
+    List<DropdownMenuItem<int>> items = [];
 
-  Container _buildDropDownTrainings() {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.blue),
-          borderRadius: BorderRadius.circular(6.0),
-          color: Colors.white),
-      padding: EdgeInsets.all(8.0),
-      margin: EdgeInsets.only(bottom: 40.0),
-      width: double.infinity,
-      child: DropdownButtonFormField<int>(
-        decoration: InputDecoration(border: InputBorder.none),
-        value: 0,
-        items: [
-          DropdownMenuItem<int>(
-            child: Text('Selecciona una competencia'),
-            value: 0,
-          ),
-          DropdownMenuItem<int>(
-            child: Row(
-              children: [
-                Text(
-                  'Buena comunicacion',
-                ),
-                _isCompetencieSelected(1)
-                    ? Icon(Icons.select_all_rounded)
-                    : SizedBox.shrink(),
-              ],
-            ),
-            value: 1,
-          ),
-          DropdownMenuItem<int>(
-            child: Text('Buen teamplayer'),
-            value: 2,
-          ),
+    var defaultDdMenuitem = DropdownMenuItem<int>(
+      child: Row(
+        children: [
+          Text("Seleccione la posicion a la que aspira"),
         ],
-        onChanged: (int newValue) => _onCompetenciesSelectedChange(newValue),
       ),
+      value: 0,
     );
-  }
 
-  _onCompetenciesSelectedChange(int value) {
-    if (_isCompetencieSelected(value)) {
-      _compentenciesSelected.remove(value);
-    } else {
-      _compentenciesSelected.add(value);
+    items.add(defaultDdMenuitem);
+
+    for (var jobPosition in _jobPositions) {
+      final ddMenuItem = DropdownMenuItem<int>(
+        child: Row(
+          children: [
+            Text(jobPosition.name),
+          ],
+        ),
+        value: jobPosition.id,
+      );
+
+      items.add(ddMenuItem);
     }
-    setState(() {});
+
+    return items;
   }
 
-  Color _isCompetencieSelectedColor(int id) {
-    var result = _isCompetencieSelected(id);
-    return result ? Colors.green : Colors.white;
+  _buildLaborExperiencesMultiSelect() {
+    var dataSource = [];
+
+    for (LaborExperiences labExp in _laborExperiences) {
+      Map<String, dynamic> dataSourceItem = {};
+      dataSourceItem["display"] = "${labExp.position} - ${labExp.company}";
+      dataSourceItem["value"] = labExp.id;
+      dataSource.add(dataSourceItem);
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.blue),
+          borderRadius: BorderRadius.circular(6.0),
+          color: Colors.white),
+      margin: EdgeInsets.only(bottom: 30.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      child: MultiSelectFormField(
+        autovalidate: false,
+        chipBackGroundColor: Colors.blue,
+        chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+        dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
+        checkBoxActiveColor: Colors.blue,
+        checkBoxCheckColor: Colors.green,
+        title: _buildTextFieldTitle("Experiencia Laboral"),
+        dataSource: dataSource,
+        textField: 'display',
+        valueField: 'value',
+        okButtonLabel: 'OK',
+        cancelButtonLabel: 'CANCELAR',
+        hintWidget: Text('Selecciona tu experiencia laboral'),
+        initialValue: _laborExperiencesSelected,
+        onSaved: (values) {
+          if (values == null) return;
+          setState(
+            () {
+              for (int id in values) {
+                _laborExperiencesSelected.add(id);
+              }
+            },
+          );
+        },
+      ),
+    );
   }
 
-  bool _isCompetencieSelected(int id) {
-    return _compentenciesSelected.any((item) => item == id);
+  _buildTrainigsMultiSelect() {
+    var dataSource = [];
+
+    for (Trainings traing in _trainings) {
+      Map<String, dynamic> dataSourceItem = {};
+      dataSourceItem["display"] = traing.description;
+      dataSourceItem["value"] = traing.id;
+      dataSource.add(dataSourceItem);
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.blue),
+          borderRadius: BorderRadius.circular(6.0),
+          color: Colors.white),
+      margin: EdgeInsets.only(bottom: 30.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      child: MultiSelectFormField(
+        autovalidate: false,
+        chipBackGroundColor: Colors.blue,
+        chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+        dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
+        checkBoxActiveColor: Colors.blue,
+        checkBoxCheckColor: Colors.green,
+        title: _buildTextFieldTitle("Capacitaciones"),
+        dataSource: dataSource,
+        textField: 'display',
+        valueField: 'value',
+        okButtonLabel: 'OK',
+        cancelButtonLabel: 'CANCELAR',
+        hintWidget: Text('Selecciona tus capacitaciones'),
+        initialValue: _trainingsSelected,
+        onSaved: (values) {
+          if (values == null) return;
+          setState(
+            () {
+              for (int id in values) {
+                _trainingsSelected.add(id);
+              }
+            },
+          );
+        },
+      ),
+    );
   }
 }

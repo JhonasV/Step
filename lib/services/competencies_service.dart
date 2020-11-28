@@ -7,8 +7,9 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 
 class CompetenciesService {
-  static Future<List<Competencies>> getAll() async {
-    List<Competencies> result = [];
+  static Future<TaskResult<List<Competencies>>> getAll() async {
+    TaskResult<List<Competencies>> result =
+        new TaskResult<List<Competencies>>();
     var token = await AuthService.getToken();
 
     try {
@@ -16,13 +17,15 @@ class CompetenciesService {
         "$API_URI/compentencies",
         headers: {"Authorization": "Bearer $token"},
       );
+      final bodyDecoded = json.decode(response.body);
+      result.messages = bodyDecoded["messages"];
+      result.success = bodyDecoded["success"];
 
       if (response.statusCode == 200) {
-        final bodyDecoded = json.decode(response.body);
-        result = Competencies.toList(bodyDecoded["data"]);
+        result.data = Competencies.toList(bodyDecoded["data"]);
       }
     } catch (e) {
-      print(e.message);
+      result.messages = e.toString();
     }
 
     return result;

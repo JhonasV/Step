@@ -7,8 +7,9 @@ import 'package:http/http.dart' as http;
 import 'auth_service.dart';
 
 class JobPositionsService {
-  static Future<List<JobPositions>> getAll() async {
-    List<JobPositions> result = [];
+  static Future<TaskResult<List<JobPositions>>> getAll() async {
+    TaskResult<List<JobPositions>> result =
+        new TaskResult<List<JobPositions>>();
     var token = await AuthService.getToken();
 
     try {
@@ -19,7 +20,8 @@ class JobPositionsService {
 
       if (response.statusCode == 200) {
         final bodyDecoded = json.decode(response.body);
-        result = parseJobPositions(bodyDecoded["data"]);
+        result.data = JobPositions.toList(bodyDecoded["data"]);
+        result.success = true;
       }
     } catch (e) {
       print(e.toString());
@@ -116,11 +118,5 @@ class JobPositionsService {
     }
 
     return result;
-  }
-
-  static List<JobPositions> parseJobPositions(dynamic responseBody) {
-    return responseBody
-        .map<JobPositions>((json) => JobPositions.fromJson(json))
-        .toList();
   }
 }

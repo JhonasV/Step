@@ -9,7 +9,7 @@ import 'package:Step/services/labor_experience_service.dart';
 import 'package:flutter/material.dart';
 
 class CreateLaborExperiencesScreen extends StatefulWidget {
-  static final String id = "create_languages_screen";
+  static final String id = "create_labor_experiences_screen";
   final LaborExperiences laborExperiences;
   CreateLaborExperiencesScreen({this.laborExperiences});
   @override
@@ -92,7 +92,7 @@ class _CreateLaborExperiencesState extends State<CreateLaborExperiencesScreen> {
                         alignment: Alignment.center,
                         margin: EdgeInsets.only(bottom: 40.0),
                         child: Text(
-                          "Posiciones de trabajo",
+                          "Experiencia Laboral",
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w600,

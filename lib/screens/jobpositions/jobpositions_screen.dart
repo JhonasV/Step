@@ -29,7 +29,7 @@ class _JobPositionsState extends State<JobPositionsScreen> {
 
   _setupFetchJobPositions() async {
     var result = await JobPositionsService.getAll();
-    if (result.length > 0) setState(() => _jobPositions = result);
+    if (result.success) setState(() => _jobPositions = result.data);
   }
 
   void _writeOnPdf() {

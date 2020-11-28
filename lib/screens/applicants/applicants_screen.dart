@@ -1,6 +1,5 @@
 import 'package:Step/screens/applicants/create_applicants_screen.dart';
 import 'package:Step/screens/applicants/listview_applicants.dart';
-import 'package:Step/widgets/step_menu_widget.dart';
 import 'package:flutter/material.dart';
 
 class ApplicantsScreen extends StatefulWidget {

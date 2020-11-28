@@ -34,4 +34,10 @@ class JobPositions {
       'status': jobPositions.status
     };
   }
+
+  static List<JobPositions> toList(dynamic responseBody) {
+    return responseBody
+        .map<JobPositions>((json) => JobPositions.fromJson(json))
+        .toList();
+  }
 }
