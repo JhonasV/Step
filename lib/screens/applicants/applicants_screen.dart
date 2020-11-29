@@ -21,9 +21,11 @@ class _ApplicantsScreenState extends State<ApplicantsScreen> {
         child: Icon(Icons.add),
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CreateApplicantsScreen()));
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateApplicantsScreen(applicants: null),
+            ),
+          );
         },
       ),
       body: Center(

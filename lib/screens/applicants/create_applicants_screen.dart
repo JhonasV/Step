@@ -1,16 +1,25 @@
+import 'package:Step/models/applicants.dart';
 import 'package:Step/models/competencies.dart';
 import 'package:Step/models/jobpositions.dart';
 import 'package:Step/models/labor_experiences.dart';
+import 'package:Step/models/taskresult.dart';
 import 'package:Step/models/trainings.dart';
+import 'package:Step/screens/applicants/applicants_screen.dart';
+import 'package:Step/screens/home_screen.dart';
+import 'package:Step/services/applicants_service.dart';
 import 'package:Step/services/competencies_service.dart';
 import 'package:Step/services/jobpositions_service.dart';
 import 'package:Step/services/labor_experience_service.dart';
 import 'package:Step/services/trainings_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 class CreateApplicantsScreen extends StatefulWidget {
   static final String id = "create_applicants_screen";
+  final Applicants applicants;
+
+  CreateApplicantsScreen({this.applicants});
   @override
   _CreateApplicantsScreenState createState() => _CreateApplicantsScreenState();
 }
@@ -23,7 +32,9 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
       _name = '',
       _department = '',
       _recommendedBy = '',
-      _position = '';
+      _aspirationSalary = '';
+
+  int _position = 0;
 
   List<int> _compentenciesSelected = [];
   List<int> _laborExperiencesSelected = [];
@@ -48,6 +59,33 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
     _setupLaborExperiences();
     _setupTrainings();
     _setupJobPositions();
+    _setupInitialValues();
+  }
+
+  _setupInitialValues() {
+    if (widget.applicants != null) {
+      setState(
+        () {
+          _documentNumber = widget.applicants?.documenNumber;
+          _name = widget.applicants?.name;
+          _department = widget.applicants?.department;
+          _recommendedBy = widget.applicants?.recommendedBy;
+          _aspirationSalary = widget.applicants?.salaryAspiration.toString();
+          _position = widget.applicants?.jobPositionId;
+          _isUpdated = true;
+
+          var selectedCompIds = widget.applicants.competencies.map((e) => e.id);
+          _compentenciesSelected.addAll(selectedCompIds);
+
+          var selectedTrainsIds = widget.applicants.trainings.map((e) => e.id);
+          _trainingsSelected.addAll(selectedTrainsIds);
+
+          var selectedLabExpIds =
+              widget.applicants.laborExperiences.map((e) => e.id);
+          _laborExperiencesSelected.addAll(selectedLabExpIds);
+        },
+      );
+    }
   }
 
   _setupJobPositions() async {
@@ -134,8 +172,74 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
     setState(() => _loadingTrainings = !_loadingTrainings);
   }
 
-  _onSubmit() {
-    if (_formKey.currentState.validate()) {}
+  _onSubmit() async {
+    if (_formKey.currentState.validate()) {
+      setState(() => _isLoading = !_isLoading);
+      _formKey.currentState.save();
+      // Populate Applicant
+      Applicants applicants = new Applicants();
+      applicants.department = _department;
+      applicants.documenNumber = _documentNumber;
+      applicants.jobPositionId = _position;
+      applicants.name = _name;
+      applicants.recommendedBy = _recommendedBy;
+      applicants.salaryAspiration = int.parse(_aspirationSalary).toDouble();
+
+      print(applicants);
+
+      // Populate ApplicantsTraining
+      List<ApplicantsTrainings> applicantsTrainings = [];
+
+      for (int id in _trainingsSelected) {
+        ApplicantsTrainings appTraining =
+            new ApplicantsTrainings(trainingsId: id);
+        applicantsTrainings.add(appTraining);
+      }
+
+      print(applicantsTrainings);
+      // Populate ApplicantsCompetencies
+      List<ApplicantsCompentencies> applicantsCompetencies = [];
+
+      for (int id in _compentenciesSelected) {
+        ApplicantsCompentencies app =
+            new ApplicantsCompentencies(competenciesId: id);
+        applicantsCompetencies.add(app);
+      }
+
+      print(applicantsCompetencies);
+      // Populate ApplicantsLaborExperiences
+      List<ApplicantsLaborExperiences> applicantsLaborExperiences = [];
+
+      for (int id in _laborExperiencesSelected) {
+        ApplicantsLaborExperiences app =
+            new ApplicantsLaborExperiences(laborExperiencesId: id);
+
+        applicantsLaborExperiences.add(app);
+      }
+
+      print(applicantsLaborExperiences);
+      //
+
+      var result = await ApplicantsService.create(
+        applicants,
+        applicantsTrainings,
+        applicantsCompetencies,
+        applicantsLaborExperiences,
+      );
+
+      if (result.success) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, HomeScreen.id, (route) => false);
+
+        Navigator.pushNamed(context, ApplicantsScreen.id);
+      } else {
+        var snackBar = new SnackBar(content: Text(result.messages));
+
+        _scaffoldKey.currentState.showSnackBar(snackBar);
+      }
+
+      setState(() => _isLoading = !_isLoading);
+    }
   }
 
   @override
@@ -143,6 +247,7 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -176,6 +281,8 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
                       _buildTextFieldRecommendedBy(),
                       _buildTextFieldTitle("Posicion"),
                       _buildDropDownJobPositions(),
+                      _buildTextFieldTitle("Aspiracion Salarial"),
+                      _buildTextFieldAspirationSalary(),
                       _buildCompentenciesMultiSelect(),
                       _buildLaborExperiencesMultiSelect(),
                       _buildTrainigsMultiSelect(),
@@ -236,7 +343,7 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
       child: TextFormField(
         initialValue: _documentNumber,
         validator: (input) =>
-            input.length < 5 ? "Ingresar mÍnimo 5 carácteres" : null,
+            input.length < 2 ? "Ingresar mÍnimo 2 carácteres" : null,
         onSaved: (input) => _documentNumber = input.trim(),
         style: TextStyle(fontSize: 21.0),
         decoration: InputDecoration(border: InputBorder.none),
@@ -253,9 +360,10 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
       margin: EdgeInsets.only(bottom: 30.0),
       padding: EdgeInsets.symmetric(horizontal: 8.0),
       child: TextFormField(
+        keyboardType: TextInputType.name,
         initialValue: _name,
         validator: (input) =>
-            input.length < 5 ? "Ingresar mÍnimo 5 carácteres" : null,
+            input.length < 2 ? "Ingresar mÍnimo 2 carácteres" : null,
         onSaved: (input) => _name = input.trim(),
         style: TextStyle(fontSize: 21.0),
         decoration: InputDecoration(border: InputBorder.none),
@@ -274,7 +382,7 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
       child: TextFormField(
         initialValue: _department,
         validator: (input) =>
-            input.length < 5 ? "Ingresar mÍnimo 5 carácteres" : null,
+            input.length < 2 ? "Ingresar mÍnimo 2 carácteres" : null,
         onSaved: (input) => _department = input.trim(),
         style: TextStyle(fontSize: 21.0),
         decoration: InputDecoration(border: InputBorder.none),
@@ -293,8 +401,28 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
       child: TextFormField(
         initialValue: _recommendedBy,
         validator: (input) =>
-            input.length < 5 ? "Ingresar mÍnimo 5 carácteres" : null,
+            input.length < 2 ? "Ingresar mÍnimo 2 carácteres" : null,
         onSaved: (input) => _recommendedBy = input.trim(),
+        style: TextStyle(fontSize: 21.0),
+        decoration: InputDecoration(border: InputBorder.none),
+      ),
+    );
+  }
+
+  Container _buildTextFieldAspirationSalary() {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.blue),
+          borderRadius: BorderRadius.circular(6.0),
+          color: Colors.white),
+      margin: EdgeInsets.only(bottom: 30.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      child: TextFormField(
+        keyboardType: TextInputType.number,
+        initialValue: _aspirationSalary,
+        validator: (dynamic input) =>
+            input.length < 2 ? "Ingresar mÍnimo 2 carácteres" : null,
+        onSaved: (dynamic input) => _aspirationSalary = input,
         style: TextStyle(fontSize: 21.0),
         decoration: InputDecoration(border: InputBorder.none),
       ),
@@ -358,9 +486,9 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
       width: double.infinity,
       child: DropdownButtonFormField<int>(
         decoration: InputDecoration(border: InputBorder.none),
-        value: 0,
+        value: _position,
         items: _populateJobPositionsDropDown(),
-        onChanged: (int newValue) {},
+        onChanged: (int newValue) => _position = newValue,
       ),
     );
   }

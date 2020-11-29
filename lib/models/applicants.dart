@@ -45,7 +45,7 @@ class Applicants {
     );
   }
 
-  Map<String, dynamic> toMap(Applicants applicants) {
+  static Map<String, dynamic> toMap(Applicants applicants) {
     return {
       'id': applicants.id,
       'documentNumber': applicants.documenNumber,
@@ -71,11 +71,30 @@ class ApplicantsCompentencies {
 
   ApplicantsCompentencies({this.applicantsId, this.competenciesId});
 
-  Map<String, dynamic> toMap(ApplicantsCompentencies applicantsCompentencies) {
+  static Map<String, dynamic> toMap(
+      ApplicantsCompentencies applicantsCompentencies) {
     return {
       'applicantsId': applicantsCompentencies.applicantsId,
       'compentenciesId': applicantsCompentencies.competenciesId,
     };
+  }
+
+  static List<Map<String, dynamic>> toMapList(
+      List<ApplicantsCompentencies> applicantsCompentencies) {
+    List<Map<String, dynamic>> mapList = [];
+
+    Map<String, dynamic> map = {};
+
+    for (var item in applicantsCompentencies) {
+      map = {
+        'applicantsId': item.applicantsId,
+        'compentenciesId': item.competenciesId,
+      };
+
+      mapList.add(map);
+    }
+
+    return mapList;
   }
 }
 
@@ -85,11 +104,29 @@ class ApplicantsTrainings {
 
   ApplicantsTrainings({this.applicantsId, this.trainingsId});
 
-  Map<String, dynamic> toMap(ApplicantsTrainings applicantsCompentencies) {
+  static Map<String, dynamic> toMap(ApplicantsTrainings applicantsTrainings) {
     return {
-      'applicantsId': applicantsCompentencies.applicantsId,
-      'trainingsId': applicantsCompentencies.trainingsId,
+      'applicantsId': applicantsTrainings.applicantsId,
+      'trainingsId': applicantsTrainings.trainingsId,
     };
+  }
+
+  static List<Map<String, dynamic>> toMapList(
+      List<ApplicantsTrainings> applicantsTrainings) {
+    List<Map<String, dynamic>> mapList = [];
+
+    Map<String, dynamic> map = {};
+
+    for (var item in applicantsTrainings) {
+      map = {
+        'applicantsId': item.applicantsId,
+        'trainingsId': item.trainingsId,
+      };
+
+      mapList.add(map);
+    }
+
+    return mapList;
   }
 }
 
@@ -99,11 +136,29 @@ class ApplicantsLaborExperiences {
 
   ApplicantsLaborExperiences({this.applicantsId, this.laborExperiencesId});
 
-  Map<String, dynamic> toMap(
-      ApplicantsLaborExperiences applicantsCompentencies) {
+  static Map<String, dynamic> toMap(
+      ApplicantsLaborExperiences applicantsLaborExperiences) {
     return {
-      'applicantsId': applicantsCompentencies.applicantsId,
-      'laborExperiencesId': applicantsCompentencies.laborExperiencesId,
+      'applicantsId': applicantsLaborExperiences.applicantsId,
+      'laborExperiencesId': applicantsLaborExperiences.laborExperiencesId,
     };
+  }
+
+  static List<Map<String, dynamic>> toMapList(
+      List<ApplicantsLaborExperiences> applicantsLaborExperiences) {
+    List<Map<String, dynamic>> mapList = [];
+
+    Map<String, dynamic> map = {};
+
+    for (var item in applicantsLaborExperiences) {
+      map = {
+        'applicantsId': item.applicantsId,
+        'laborExperiencesId': item.laborExperiencesId,
+      };
+
+      mapList.add(map);
+    }
+
+    return mapList;
   }
 }
