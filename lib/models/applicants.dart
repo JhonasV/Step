@@ -4,7 +4,7 @@ import 'package:Step/models/trainings.dart';
 
 class Applicants {
   int id;
-  String documenNumber;
+  String documentNumber;
   String name;
   int jobPositionId;
   String department;
@@ -17,7 +17,7 @@ class Applicants {
 
   Applicants({
     this.id,
-    this.documenNumber,
+    this.documentNumber,
     this.name,
     this.jobPositionId,
     this.department,
@@ -32,7 +32,7 @@ class Applicants {
   factory Applicants.fromJson(Map<String, dynamic> json) {
     return Applicants(
       id: json['id'],
-      documenNumber: json['documentNumber'],
+      documentNumber: json['documentNumber'],
       name: json['name'],
       jobPositionId: json['jobPositionId'],
       department: json['department'],
@@ -47,14 +47,14 @@ class Applicants {
 
   static Map<String, dynamic> toMap(Applicants applicants) {
     return {
-      'id': applicants.id,
-      'documentNumber': applicants.documenNumber,
+      'id': applicants.id ?? 0,
+      'documentNumber': applicants.documentNumber,
       'name': applicants.name,
       'jobPositionId': applicants.jobPositionId,
       'department': applicants.department,
       'salaryAspiration': applicants.salaryAspiration,
       'recommendedBy': applicants.recommendedBy,
-      'usersId': applicants.usersId,
+      'usersId': applicants.usersId ?? 0,
     };
   }
 
@@ -87,7 +87,7 @@ class ApplicantsCompentencies {
 
     for (var item in applicantsCompentencies) {
       map = {
-        'applicantsId': item.applicantsId,
+        'applicantsId': item.applicantsId ?? 0,
         'compentenciesId': item.competenciesId,
       };
 
@@ -95,6 +95,14 @@ class ApplicantsCompentencies {
     }
 
     return mapList;
+  }
+
+  static List<ApplicantsCompentencies> populateListWithApplicantId(
+      List<ApplicantsCompentencies> list, int applicantsId) {
+    for (int i; i < list.length; i++) {
+      list[i].applicantsId = applicantsId;
+    }
+    return list;
   }
 }
 
@@ -119,7 +127,7 @@ class ApplicantsTrainings {
 
     for (var item in applicantsTrainings) {
       map = {
-        'applicantsId': item.applicantsId,
+        'applicantsId': item.applicantsId ?? 0,
         'trainingsId': item.trainingsId,
       };
 
@@ -127,6 +135,14 @@ class ApplicantsTrainings {
     }
 
     return mapList;
+  }
+
+  static List<ApplicantsTrainings> populateListWithApplicantId(
+      List<ApplicantsTrainings> list, int applicantsId) {
+    for (int i; i < list.length; i++) {
+      list[i].applicantsId = applicantsId;
+    }
+    return list;
   }
 }
 
@@ -152,7 +168,7 @@ class ApplicantsLaborExperiences {
 
     for (var item in applicantsLaborExperiences) {
       map = {
-        'applicantsId': item.applicantsId,
+        'applicantsId': item.applicantsId ?? 0,
         'laborExperiencesId': item.laborExperiencesId,
       };
 
@@ -160,5 +176,13 @@ class ApplicantsLaborExperiences {
     }
 
     return mapList;
+  }
+
+  static List<ApplicantsLaborExperiences> populateListWithApplicantId(
+      List<ApplicantsLaborExperiences> list, int applicantsId) {
+    for (int i; i < list.length; i++) {
+      list[i].applicantsId = applicantsId;
+    }
+    return list;
   }
 }

@@ -66,7 +66,7 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
     if (widget.applicants != null) {
       setState(
         () {
-          _documentNumber = widget.applicants?.documenNumber;
+          _documentNumber = widget.applicants?.documentNumber;
           _name = widget.applicants?.name;
           _department = widget.applicants?.department;
           _recommendedBy = widget.applicants?.recommendedBy;
@@ -179,13 +179,11 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
       // Populate Applicant
       Applicants applicants = new Applicants();
       applicants.department = _department;
-      applicants.documenNumber = _documentNumber;
+      applicants.documentNumber = _documentNumber;
       applicants.jobPositionId = _position;
       applicants.name = _name;
       applicants.recommendedBy = _recommendedBy;
       applicants.salaryAspiration = int.parse(_aspirationSalary).toDouble();
-
-      print(applicants);
 
       // Populate ApplicantsTraining
       List<ApplicantsTrainings> applicantsTrainings = [];
@@ -220,10 +218,10 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
       print(applicantsLaborExperiences);
       //
 
-      var result = await ApplicantsService.create(
+      var result = await ApplicantsService.createApplicantAsync(
         applicants,
-        applicantsTrainings,
         applicantsCompetencies,
+        applicantsTrainings,
         applicantsLaborExperiences,
       );
 
@@ -233,11 +231,12 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
 
         Navigator.pushNamed(context, ApplicantsScreen.id);
       } else {
-        var snackBar = new SnackBar(content: Text(result.messages));
+        if (result.messages != null) {
+          var snackBar = new SnackBar(content: Text(result.messages));
 
-        _scaffoldKey.currentState.showSnackBar(snackBar);
+          _scaffoldKey.currentState.showSnackBar(snackBar);
+        }
       }
-
       setState(() => _isLoading = !_isLoading);
     }
   }
@@ -345,6 +344,7 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
         validator: (input) =>
             input.length < 2 ? "Ingresar mÍnimo 2 carácteres" : null,
         onSaved: (input) => _documentNumber = input.trim(),
+        onChanged: (input) => _documentNumber = input.trim(),
         style: TextStyle(fontSize: 21.0),
         decoration: InputDecoration(border: InputBorder.none),
       ),
@@ -365,6 +365,7 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
         validator: (input) =>
             input.length < 2 ? "Ingresar mÍnimo 2 carácteres" : null,
         onSaved: (input) => _name = input.trim(),
+        onChanged: (input) => _name = input.trim(),
         style: TextStyle(fontSize: 21.0),
         decoration: InputDecoration(border: InputBorder.none),
       ),
@@ -384,6 +385,7 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
         validator: (input) =>
             input.length < 2 ? "Ingresar mÍnimo 2 carácteres" : null,
         onSaved: (input) => _department = input.trim(),
+        onChanged: (input) => _department = input.trim(),
         style: TextStyle(fontSize: 21.0),
         decoration: InputDecoration(border: InputBorder.none),
       ),
@@ -403,6 +405,7 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
         validator: (input) =>
             input.length < 2 ? "Ingresar mÍnimo 2 carácteres" : null,
         onSaved: (input) => _recommendedBy = input.trim(),
+        onChanged: (input) => _recommendedBy = input.trim(),
         style: TextStyle(fontSize: 21.0),
         decoration: InputDecoration(border: InputBorder.none),
       ),
@@ -466,7 +469,9 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
           setState(
             () {
               for (int id in values) {
-                _compentenciesSelected.add(id);
+                var isAlreadySelected =
+                    _compentenciesSelected.any((item) => item == id);
+                if (!isAlreadySelected) _compentenciesSelected.add(id);
               }
             },
           );
@@ -560,7 +565,9 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
           setState(
             () {
               for (int id in values) {
-                _laborExperiencesSelected.add(id);
+                var isAlreadySelected =
+                    _laborExperiencesSelected.any((item) => item == id);
+                if (!isAlreadySelected) _laborExperiencesSelected.add(id);
               }
             },
           );
@@ -606,7 +613,9 @@ class _CreateApplicantsScreenState extends State<CreateApplicantsScreen> {
           setState(
             () {
               for (int id in values) {
-                _trainingsSelected.add(id);
+                var isAlreadySelected =
+                    _trainingsSelected.any((item) => item == id);
+                if (!isAlreadySelected) _trainingsSelected.add(id);
               }
             },
           );

@@ -50,7 +50,7 @@ class _ListViewApplicantsState extends State<ListViewApplicants> {
                 margin: EdgeInsets.only(top: 60.0),
                 alignment: Alignment.topCenter,
                 child: Text(
-                  "No hay candidatos...",
+                  "Completa tu información de candidato...",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
@@ -116,44 +116,44 @@ class _ListViewApplicantsState extends State<ListViewApplicants> {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(FontAwesomeIcons.trash, color: Colors.red),
-                  onPressed: () async {
-                    bool deleted = await showAlertDialog(
-                        "¿Seguro de eliminar este recurso?", context);
+            // Row(
+            //   children: [
+            //     IconButton(
+            //       icon: Icon(FontAwesomeIcons.trash, color: Colors.red),
+            //       onPressed: () async {
+            //         bool deleted = await showAlertDialog(
+            //             "¿Seguro de eliminar este recurso?", context);
 
-                    // if (deleted) {
-                    //   setState(() => _deletingLoading != _deletingLoading);
-                    //   var result = await ApplicantsService.delete(item.id);
-                    //   if (result.success) {
-                    //     var tempApplicants = _applicants;
-                    //     tempApplicants.remove(item);
-                    //     setState(() {
-                    //       _applicants = tempApplicants;
-                    //       _deletingLoading = false;
-                    //     });
-                    //   } else {
-                    //     await showAlertDialog(
-                    //       "Hubo un error al intentar eliminar el recurso, intente más tarde.",
-                    //       context,
-                    //     );
-                    //   }
-                    // }
-                  },
-                ),
-                IconButton(
-                  icon: Icon(FontAwesomeIcons.solidEdit,
-                      color: Colors.yellow[300]),
-                  onPressed: () {
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //     builder: (context) =>
-                    //         CreateCompentenciesScreen(applicants: item)));
-                  },
-                ),
-              ],
-            )
+            //         // if (deleted) {
+            //         //   setState(() => _deletingLoading != _deletingLoading);
+            //         //   var result = await ApplicantsService.delete(item.id);
+            //         //   if (result.success) {
+            //         //     var tempApplicants = _applicants;
+            //         //     tempApplicants.remove(item);
+            //         //     setState(() {
+            //         //       _applicants = tempApplicants;
+            //         //       _deletingLoading = false;
+            //         //     });
+            //         //   } else {
+            //         //     await showAlertDialog(
+            //         //       "Hubo un error al intentar eliminar el recurso, intente más tarde.",
+            //         //       context,
+            //         //     );
+            //         //   }
+            //         // }
+            //       },
+            //     ),
+            //     IconButton(
+            //       icon: Icon(FontAwesomeIcons.solidEdit,
+            //           color: Colors.yellow[300]),
+            //       onPressed: () {
+            //         // Navigator.of(context).push(MaterialPageRoute(
+            //         //     builder: (context) =>
+            //         //         CreateCompentenciesScreen(applicants: item)));
+            //       },
+            //     ),
+            //   ],
+            // )
           ],
         ),
         // trailing: Icon(FontAwesomeIcons.arrowAltCircleRight),

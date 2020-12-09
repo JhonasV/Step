@@ -38,33 +38,31 @@ class ApplicantsService {
     return result;
   }
 
-  static Future<TaskResult<bool>> create(
+  static Future<TaskResult<int>> createApplicantAsync(
       Applicants app,
-      List<ApplicantsTrainings> applicantsTrainings,
-      List<ApplicantsCompentencies> applicantsCompetencies,
-      List<ApplicantsLaborExperiences> applicantsLaborExperiences) async {
-    TaskResult<bool> result = new TaskResult<bool>();
+      List<ApplicantsCompentencies> appComps,
+      List<ApplicantsTrainings> appTrain,
+      List<ApplicantsLaborExperiences> appLabExp) async {
+    TaskResult<int> result = new TaskResult<int>();
     String token = await AuthService.getToken();
 
     try {
       var url = Uri.http(baseUrl, '/api/v1/applicants');
 
+      var body = jsonEncode({
+        'applicants': Applicants.toMap(app),
+        'applicantsCompentencies': ApplicantsCompentencies.toMapList(appComps),
+        'applicantsTrainings': ApplicantsTrainings.toMapList(appTrain),
+        'applicantsLaborExperiences':
+            ApplicantsLaborExperiences.toMapList(appLabExp),
+      });
+
       http.Response response = await http.post(
         url,
-        body: jsonEncode(
-          {
-            'applicants': Applicants.toMap(app),
-            'applicantsTrainings':
-                ApplicantsTrainings.toMapList(applicantsTrainings),
-            'applicantsCompentencies':
-                ApplicantsCompentencies.toMapList(applicantsCompetencies),
-            'applicantsLaborExperiences': ApplicantsLaborExperiences.toMapList(
-                applicantsLaborExperiences),
-          },
-        ),
+        body: body,
         headers: {
           HttpHeaders.authorizationHeader: 'Bearer $token',
-          HttpHeaders.contentTypeHeader: 'applicantion/json',
+          HttpHeaders.contentTypeHeader: 'application/json',
           HttpHeaders.acceptHeader: 'application/json'
         },
       );
